@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/rhig_cart_vendor/rhig_cart_vendor.iml" filepath="$PROJECT_DIR$/rhig_cart_vendor/rhig_cart_vendor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rhig_cart_vendor/android/rhig_cart_vendor_android.iml" filepath="$PROJECT_DIR$/rhig_cart_vendor/android/rhig_cart_vendor_android.iml" />
+    </modules>
+  </component>
+</project>
