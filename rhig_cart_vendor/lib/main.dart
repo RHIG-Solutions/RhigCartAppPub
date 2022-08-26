@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:rhig_cart_vendor/reusables/constants.dart';
 import 'package:rhig_cart_vendor/screens/login.dart';
+import 'package:rhig_cart_vendor/screens/recover_1.dart';
+import 'package:rhig_cart_vendor/screens/recover_2.dart';
 import 'package:rhig_cart_vendor/screens/test.dart';
 import 'package:rhig_cart_vendor/screens/signup_1.dart';
 import 'package:rhig_cart_vendor/screens/signup_2.dart';
 import 'package:rhig_cart_vendor/screens/signup_3.dart';
 import 'package:rhig_cart_vendor/screens/signup_4.dart';
+import 'package:rhig_cart_vendor/screens/welcome.dart';
 import 'package:rhig_cart_vendor/styles.dart';
 import 'package:rhig_cart_vendor/models/vendor_model.dart';
 
@@ -54,6 +57,7 @@ class _RhigCartVendorState extends State<RhigCartVendor> {
       ),
       routes: {
         '/': (context) => const LoginScreen(),
+        '/recover1': (context) => const Recover1(),
         '/test': (context) => const Test(), //TODO: Remove test route when done
       },
       onGenerateRoute: (settings) {
@@ -72,6 +76,14 @@ class _RhigCartVendorState extends State<RhigCartVendor> {
         if (settings.name == '/signup4') {
           final value = settings.arguments as Vendor; // Retrieve the value.
           return MaterialPageRoute(builder: (_) => SignUp4(value));
+        }
+        if (settings.name == '/welcome') {
+          final value = settings.arguments as String; // Retrieve the value.
+          return MaterialPageRoute(builder: (_) => Welcome(value));
+        }
+        if (settings.name == '/recover2') {
+          final value = settings.arguments as String; // Retrieve the value.
+          return MaterialPageRoute(builder: (_) => Recover2(value));
         }
         return null;
       },

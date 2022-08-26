@@ -101,6 +101,70 @@ class _InputFieldState extends State<InputField> {
   }
 }
 
+//Build OTP input field
+class OTPField extends StatefulWidget {
+  final FocusNode node;
+  final FocusNode nextNode;
+  final TextEditingController controller;
+  final bool isLast;
+  final String errorText;
+  final double width;
+
+  const OTPField({
+    Key? key,
+    required this.node,
+    required this.nextNode,
+    required this.controller,
+    required this.isLast,
+    this.errorText = '',
+    required this.width,
+  }) : super(key: key);
+
+  @override
+  State<OTPField> createState() => _OTPFieldState();
+}
+
+class _OTPFieldState extends State<OTPField> {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: widget.width,
+      child: TextField(
+        textAlign: TextAlign.center,
+        focusNode: widget.node,
+        controller: widget.controller,
+        keyboardType: TextInputType.number,
+        inputFormatters: [OTPFormatter()],
+        textInputAction:
+            widget.isLast ? TextInputAction.done : TextInputAction.next,
+        onSubmitted: (value) {
+          //The following line activates the keyboard for the next field when pressing the
+          //next button in the current field
+          widget.isLast
+              ? null
+              : FocusScope.of(context).requestFocus(widget.nextNode);
+        },
+        onChanged: (value) {
+          //The following lines focus on the next field when a digit is entered
+          widget.controller.text.isNotEmpty
+              ? widget.isLast
+                  ? FocusScope.of(context).unfocus()
+                  : FocusScope.of(context).requestFocus(widget.nextNode)
+              : null;
+        },
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: kInputBackground,
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.only(top: 5),
+          errorText: widget.errorText.isNotEmpty ? widget.errorText : null,
+        ),
+      ),
+    );
+  }
+}
+
+//Build checkbox field
 class CheckBoxField extends StatefulWidget {
   final String label;
   final Vendor myVendor;

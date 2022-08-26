@@ -7,6 +7,22 @@ import 'constants.dart';
 int topArtSplitPercentage = 35; // Top color split percentage
 double arcStart = 60; // How far up the box the arc should start
 
+//Paints two tone grey background
+BoxDecoration rHIGGreyBackgroundDecoration = BoxDecoration(
+  gradient: LinearGradient(
+    colors: const [
+      kRHIGBackLightGrey,
+      kRHIGBackLightGrey,
+      kRHIGBackDarkGrey,
+      kRHIGBackDarkGrey
+    ],
+    stops: [0, topArtSplitPercentage / 100, topArtSplitPercentage / 100, 1.0],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  ),
+);
+
+//Paints Top Artwork for signup pages
 Widget topArt() {
   return Stack(
     children: [

@@ -37,92 +37,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Stack(
                           children: [
                             topArt(),
-                            SafeArea(
-                              child: Column(
-                                children: [
-                                  buildTitle(title: 'SIGN IN'),
-                                  SizedBox(height: kTopSpacer1),
-                                  const Text('Hi,', style: kHeader1Style),
-                                  const Text(
-                                    'Sign in to continue',
-                                    style: kStandardWhiteStyle,
-                                  ),
-                                ],
-                              ),
-                            ),
+                            buildPageDescription(),
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: kMarginMain, top: 30.0, right: kMarginMain),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            InputField(
-                              node: _myLogin._emailNode,
-                              nextNode: _myLogin._passwordNode,
-                              controller: _myLogin._emailController,
-                              label: 'Your Email',
-                              hint: 'Email Address',
-                              errorText: _myLogin.errorText,
-                              hasIcon: true,
-                              icon: Icons.mail_outline,
-                            ),
-                            SizedBox(height: kInputSpacer),
-                            InputField(
-                                node: _myLogin._passwordNode,
-                                nextNode: _myLogin._passwordNode,
-                                controller: _myLogin._passwordController,
-                                label: 'Your Password',
-                                hint: 'Password',
-                                isLast: true,
-                                isPassword: true),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: buildTextButton(
-                                  label: 'I forgot my password?',
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, '/test');
-                                  }),
-                            ),
-                          ],
-                        ),
-                      ),
+                      //Builds main input section
+                      buildInputSection(context),
                       Expanded(child: Container(height: 20.0)),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: kMarginMain),
-                        child: buildBottomButton(
-                            label: 'SIGN IN',
-                            onPressed: () {
-                              setState(() {
-                                if (_myLogin.loginSuccessful()) {
-                                  _myLogin.errorText = '';
-                                  Navigator.pushNamed(context, '/test');
-                                } else {
-                                  _myLogin.errorText =
-                                      'Username / Password incorrect';
-                                }
-                              });
-                            }), //TODO: Add SIGN IN button routing
-                      ),
-                      const SizedBox(height: 20.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'Don\'t have an account?',
-                            style: TextStyle(color: kRHIGDarkGreen),
-                          ),
-                          buildTextButton(
-                              label: 'Sign Up',
-                              onPressed: () {
-                                Vendor myVendor = Vendor();
-                                Navigator.pushNamed(context, '/signup1',
-                                    arguments: myVendor);
-                              })
-                        ],
-                      )
+                      //Builds Sign In Button
+                      buildSignInButton(context),
+                      //Builds row with Sign Up button
+                      buildSignupRow(context),
                     ],
                   ),
                 ),
@@ -130,6 +55,107 @@ class _LoginScreenState extends State<LoginScreen> {
             );
           },
         ),
+      ),
+    );
+  }
+
+  //Builds page description area
+  SafeArea buildPageDescription() {
+    return SafeArea(
+      child: Column(
+        children: [
+          buildTitle(title: 'SIGN IN'),
+          SizedBox(height: kTopSpacer1),
+          const Text('Hi,', style: kHeader1Style),
+          const Text(
+            'Sign in to continue',
+            style: kStandardWhiteStyle,
+          ),
+        ],
+      ),
+    );
+  }
+
+  //Builds main input section, including email, password and forgot password
+  Padding buildInputSection(BuildContext context) {
+    return Padding(
+      padding:
+          EdgeInsets.only(left: kMarginMain, top: 30.0, right: kMarginMain),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //E-Mail input field
+          InputField(
+            node: _myLogin._emailNode,
+            nextNode: _myLogin._passwordNode,
+            controller: _myLogin._emailController,
+            label: 'Your Email',
+            hint: 'Email Address',
+            errorText: _myLogin.errorText,
+            hasIcon: true,
+            icon: Icons.mail_outline,
+          ),
+          SizedBox(height: kInputSpacer),
+          //Password input field
+          InputField(
+              node: _myLogin._passwordNode,
+              nextNode: _myLogin._passwordNode,
+              controller: _myLogin._passwordController,
+              label: 'Your Password',
+              hint: 'Password',
+              isLast: true,
+              isPassword: true),
+          //Forgot password button
+          Align(
+            alignment: Alignment.topRight,
+            child: buildTextButton(
+                label: 'I forgot my password?',
+                onPressed: () {
+                  Navigator.pushNamed(context, '/recover1');
+                }),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //Builds Sign In Button
+  Padding buildSignInButton(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: kMarginMain),
+      child: buildBottomButton(
+          label: 'SIGN IN',
+          onPressed: () {
+            setState(() {
+              if (_myLogin.loginSuccessful()) {
+                _myLogin.errorText = '';
+                Navigator.pushNamed(context, '/test');
+              } else {
+                _myLogin.errorText = 'Username / Password incorrect';
+              }
+            });
+          }), //TODO: Add SIGN IN button routing
+    );
+  }
+
+  //Builds row with Sign Up button
+  SizedBox buildSignupRow(BuildContext context) {
+    return SizedBox(
+      height: kBottomButtonSpace,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            'Don\'t have an account?',
+            style: TextStyle(color: kRHIGDarkGreen),
+          ),
+          buildTextButton(
+              label: 'Sign Up',
+              onPressed: () {
+                Vendor myVendor = Vendor();
+                Navigator.pushNamed(context, '/signup1', arguments: myVendor);
+              })
+        ],
       ),
     );
   }

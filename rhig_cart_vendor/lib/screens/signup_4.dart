@@ -47,8 +47,10 @@ class _SignUp4State extends State<SignUp4> {
                       buildPageInputSection(),
                       Expanded(child: Container(height: 20.0)),
                       buildContinueButton(),
-                      const SizedBox(height: 20.0),
-                      buildAlreadyHaveAccountRow(context),
+                      SizedBox(
+                        height: kBottomButtonSpace,
+                        child: buildAlreadyHaveAccountRow(context),
+                      ),
                     ],
                   ),
                 ),
@@ -137,14 +139,9 @@ class _SignUp4State extends State<SignUp4> {
           onPressed: () {
             setState(() {
               if (widget.myVendor.isValid(password: true)) {
-                //TODO Implement signup page 4 Continue button
-                // Navigator.pushReplacement(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) =>
-                //         SignUp3(myVendor: widget.myVendor),
-                //   ),
-                // );
+                //TODO Implement server side checks etc
+                Navigator.pushReplacementNamed(context, '/welcome',
+                    arguments: widget.myVendor.email.toString());
               }
             });
           }),

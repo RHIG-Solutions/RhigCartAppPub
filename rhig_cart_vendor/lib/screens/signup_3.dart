@@ -47,8 +47,10 @@ class _SignUp3State extends State<SignUp3> {
                       buildPageInputSection(),
                       Expanded(child: Container(height: 20.0)),
                       buildContinueButton(context),
-                      const SizedBox(height: 20.0),
-                      buildAlreadyHaveAccountRow(context),
+                      SizedBox(
+                        height: kBottomButtonSpace,
+                        child: buildAlreadyHaveAccountRow(context),
+                      ),
                     ],
                   ),
                 ),

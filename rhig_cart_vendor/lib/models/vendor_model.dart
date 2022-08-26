@@ -1,10 +1,11 @@
 import 'input_properties.dart';
 
 class Vendor {
+  //TODO Verify data types and correct as needed
   InputProperties firstName = InputProperties();
   InputProperties lastName = InputProperties();
   InputProperties cell = InputProperties();
-  InputProperties eMail = InputProperties();
+  InputProperties email = InputProperties();
   InputProperties street = InputProperties();
   InputProperties suburb = InputProperties();
   InputProperties city = InputProperties();
@@ -13,13 +14,13 @@ class Vendor {
   InputProperties passwordCheck = InputProperties();
   bool newsletter = true;
 
-  //Checks if the flagged fields are empty, and sets error message if so.
+  //Checks if the flagged fields are valid, and sets error message if so.
   bool isValid(
       { //List of flagged fields, gets value of true if flagged for verification
       firstName = false,
       lastName = false,
       cell = false,
-      eMail = false,
+      email = false,
       street = false,
       suburb = false,
       city = false,
@@ -35,7 +36,7 @@ class Vendor {
     if (cell == true && this.cell.isEmpty()) {
       isValid = false;
     }
-    if (eMail == true && this.eMail.isEmpty()) {
+    if (email == true && this.email.isEmpty()) {
       isValid = false;
     }
     if (street == true && this.street.isEmpty()) {
@@ -77,7 +78,7 @@ class Vendor {
         'firstname': firstName.getValue(),
         'lastname': lastName.getValue(),
         'cell': cell.getValue().replaceAll(' ', ''),
-        'email': eMail.getValue(),
+        'email': email.getValue(),
         'street': street.getValue(),
         'suburb': suburb.getValue(),
         'city': city.getValue(),

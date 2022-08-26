@@ -9,10 +9,18 @@ const kRHIGGrey = Color(0xFF686868);
 const kRHIGHintGrey = Color(0x66AAAAAA);
 const kInputBackground = Color(0xFFEEEEEE);
 const kRHIGLightGrey = Color(0xFFCCCCCC);
+const kRHIGBackLightGrey = Color(0xFF787878);
+const kRHIGBackDarkGrey = Color(0xFF6D6A69);
 
 //Text Styles
 const kHeader1Style = TextStyle(
   color: Colors.white,
+  fontSize: 45,
+);
+
+const kHeader1GreenStyle = TextStyle(
+  color: kRHIGDarkGreen,
+  fontWeight: FontWeight.bold,
   fontSize: 45,
 );
 

@@ -1,6 +1,9 @@
 // Height of the top control/information box
 double kTopArtHeight = 300.0;
 
+//Space below bottom button for extra links etc.
+double kBottomButtonSpace = 60.0;
+
 //Space between title and first info box, contains avatar
 double kTopSpacer1 = 50.0;
 

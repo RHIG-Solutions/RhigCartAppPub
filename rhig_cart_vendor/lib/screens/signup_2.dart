@@ -47,8 +47,10 @@ class _SignUp2State extends State<SignUp2> {
                       buildPageInputSection(),
                       Expanded(child: Container(height: 20.0)),
                       buildContinueButton(context),
-                      const SizedBox(height: 20.0),
-                      buildAlreadyHaveAccountRow(context),
+                      SizedBox(
+                        height: kBottomButtonSpace,
+                        child: buildAlreadyHaveAccountRow(context),
+                      ),
                     ],
                   ),
                 ),
@@ -92,7 +94,7 @@ class _SignUp2State extends State<SignUp2> {
           //Input Cell Number - Is a number
           InputField(
               node: widget.myVendor.cell.node,
-              nextNode: widget.myVendor.eMail.node,
+              nextNode: widget.myVendor.email.node,
               controller: widget.myVendor.cell.controller,
               label: 'Cell Number',
               hint: '000 000 0000',
@@ -104,12 +106,12 @@ class _SignUp2State extends State<SignUp2> {
           SizedBox(height: kInputSpacer),
           //Input Email Address
           InputField(
-              node: widget.myVendor.eMail.node,
-              nextNode: widget.myVendor.eMail.node,
-              controller: widget.myVendor.eMail.controller,
+              node: widget.myVendor.email.node,
+              nextNode: widget.myVendor.email.node,
+              controller: widget.myVendor.email.controller,
               label: 'Email Address',
               hint: 'Email Address',
-              errorText: widget.myVendor.eMail.error,
+              errorText: widget.myVendor.email.error,
               hasIcon: true,
               icon: Icons.mail_outline,
               isLast: true),
@@ -131,7 +133,7 @@ class _SignUp2State extends State<SignUp2> {
           label: 'CONTINUE',
           onPressed: () {
             setState(() {
-              if (widget.myVendor.isValid(cell: true, eMail: true)) {
+              if (widget.myVendor.isValid(cell: true, email: true)) {
                 Navigator.pushReplacementNamed(context, '/signup3',
                     arguments: widget.myVendor);
               }
