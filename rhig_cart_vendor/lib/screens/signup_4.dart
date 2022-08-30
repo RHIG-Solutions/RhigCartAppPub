@@ -8,6 +8,10 @@ import 'package:rhig_cart_vendor/reusables/inputs.dart';
 import 'package:rhig_cart_vendor/reusables/buttons.dart';
 import 'package:rhig_cart_vendor/reusables/page_counter.dart';
 import 'package:rhig_cart_vendor/models/vendor_model.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+
+enum Sources { gallery, camera }
 
 class SignUp4 extends StatefulWidget {
   final Vendor myVendor;
@@ -18,6 +22,9 @@ class SignUp4 extends StatefulWidget {
 }
 
 class _SignUp4State extends State<SignUp4> {
+  File? _image;
+  final _picker = ImagePicker();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,21 +77,27 @@ class _SignUp4State extends State<SignUp4> {
         children: [
           buildTitleWithBackReplacement(context,
               title: 'REGISTER', target: '/signup3', myVendor: widget.myVendor),
-          //TODO Implement avatar upload and choose between icon or initials
-          CircleAvatar(
-              child: const Icon(
-                Icons.perm_identity,
-                color: kRHIGGrey,
-                size: 40,
-              ),
-              // Text(
-              //   widget.myVendor.getInitials(),
-              //   style: kAvatarTextStyle,
-              // ),
+          //TODO Implement avatar image conversion, add to model and implement upload
+          GestureDetector(
+            child: CircleAvatar(
+              //If image has been chosen, displays it
+              backgroundImage: _image != null ? FileImage(_image!) : null,
               backgroundColor: kRHIGLightGrey,
-              radius: kTopSpacer1 / 2),
+              radius: kTopSpacer1 / 2,
+              //If no image is chosen, Displays initials
+              child: _image != null
+                  ? null
+                  : Text(
+                      widget.myVendor.getInitials(),
+                      style: kAvatarTextStyle,
+                    ),
+            ),
+            onTap: () {
+              _chooseImageSource();
+            },
+          ),
           //Display Vendor firstname
-          Text(widget.myVendor.firstName.controller.text + '?',
+          Text('${widget.myVendor.firstName.controller.text}?',
               style: kHeader1Style),
           const Text(
             'Please choose your password',
@@ -146,5 +159,64 @@ class _SignUp4State extends State<SignUp4> {
             });
           }),
     );
+  }
+
+  //Popup dialog to choose the image source
+  Future<void> _chooseImageSource() async {
+    switch (await showDialog<Sources>(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: const Text('Select image source'),
+            children: <Widget>[
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context, Sources.gallery);
+                },
+                child: const Text('Image Gallery'),
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context, Sources.camera);
+                },
+                child: const Text('Camera'),
+              ),
+            ],
+          );
+        })) {
+      case Sources.gallery:
+        // Picks image from gallery
+        _pickImageFromGallery();
+        break;
+      case Sources.camera:
+        // Picks image from camera
+        _pickImageFromCamera();
+        break;
+      case null:
+        // dialog dismissed
+        break;
+    }
+  }
+
+  // Pick image from gallery
+  Future<void> _pickImageFromGallery() async {
+    final XFile? pickedImage =
+        await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        _image = File(pickedImage.path);
+      });
+    }
+  }
+
+  // Get image from camera
+  Future<void> _pickImageFromCamera() async {
+    final XFile? pickedImage = await _picker.pickImage(
+        source: ImageSource.camera, maxHeight: 100, maxWidth: 100);
+    if (pickedImage != null) {
+      setState(() {
+        _image = File(pickedImage.path);
+      });
+    }
   }
 }

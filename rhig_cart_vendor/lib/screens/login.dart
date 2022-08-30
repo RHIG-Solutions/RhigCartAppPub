@@ -6,6 +6,7 @@ import 'package:rhig_cart_vendor/styles.dart';
 import 'package:rhig_cart_vendor/reusables/inputs.dart';
 import 'package:rhig_cart_vendor/reusables/buttons.dart';
 import 'package:rhig_cart_vendor/models/vendor_model.dart';
+import 'package:rhig_cart_vendor/models/login_model.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _LoginProperties _myLogin = _LoginProperties();
+  final Login _myLogin = Login();
 
   @override
   Widget build(BuildContext context) {
@@ -86,21 +87,21 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           //E-Mail input field
           InputField(
-            node: _myLogin._emailNode,
-            nextNode: _myLogin._passwordNode,
-            controller: _myLogin._emailController,
+            node: _myLogin.email.node,
+            nextNode: _myLogin.password.node,
+            controller: _myLogin.email.controller,
             label: 'Your Email',
             hint: 'Email Address',
-            errorText: _myLogin.errorText,
+            errorText: _myLogin.email.error,
             hasIcon: true,
             icon: Icons.mail_outline,
           ),
           SizedBox(height: kInputSpacer),
           //Password input field
           InputField(
-              node: _myLogin._passwordNode,
-              nextNode: _myLogin._passwordNode,
-              controller: _myLogin._passwordController,
+              node: _myLogin.password.node,
+              nextNode: _myLogin.password.node,
+              controller: _myLogin.password.controller,
               label: 'Your Password',
               hint: 'Password',
               isLast: true,
@@ -127,11 +128,11 @@ class _LoginScreenState extends State<LoginScreen> {
           label: 'SIGN IN',
           onPressed: () {
             setState(() {
-              if (_myLogin.loginSuccessful()) {
-                _myLogin.errorText = '';
+              if (_myLogin.successful()) {
+                _myLogin.password.error = '';
                 Navigator.pushNamed(context, '/test');
               } else {
-                _myLogin.errorText = 'Username / Password incorrect';
+                _myLogin.password.error = 'Username / Password incorrect';
               }
             });
           }), //TODO: Add SIGN IN button routing
@@ -158,32 +159,5 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
     );
-  }
-}
-
-class _LoginProperties {
-  bool failed = false;
-  String errorText = '';
-
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
-  final FocusNode _emailNode = FocusNode();
-  final FocusNode _passwordNode = FocusNode();
-
-  late String loggedInAccount;
-
-  bool loginSuccessful() {
-    bool _success = false;
-    //TODO: Add login check with server here, replacing dummy
-    if (_emailController.text == 'C' && _passwordController.text == 'C') {
-      loggedInAccount = _emailController.text;
-      failed = false;
-      _success = true;
-    } else {
-      failed = true;
-      _success = false;
-    }
-    return _success;
   }
 }

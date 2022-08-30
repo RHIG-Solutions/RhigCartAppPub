@@ -26,11 +26,10 @@ class Welcome extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(height: 100.0),
-                      //TODO Replace image with the correctly coloured one
                       Image.asset(
-                        'assets/images/RHIG_temp.png',
+                        'assets/images/RHIG_Solutions_icon_white.png',
                         width:
-                            possibleImageWidth > 250 ? 250 : possibleImageWidth,
+                            possibleImageWidth > 450 ? 450 : possibleImageWidth,
                       ),
                       const SizedBox(height: 30.0),
                       const Text('Welcome!', style: kHeader1GreenStyle),

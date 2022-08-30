@@ -6,10 +6,7 @@ class Vendor {
   InputProperties lastName = InputProperties();
   InputProperties cell = InputProperties();
   InputProperties email = InputProperties();
-  InputProperties street = InputProperties();
-  InputProperties suburb = InputProperties();
-  InputProperties city = InputProperties();
-  InputProperties postalCode = InputProperties();
+  Address address = Address();
   InputProperties password = InputProperties();
   InputProperties passwordCheck = InputProperties();
   bool newsletter = true;
@@ -39,16 +36,16 @@ class Vendor {
     if (email == true && this.email.isEmpty()) {
       isValid = false;
     }
-    if (street == true && this.street.isEmpty()) {
+    if (street == true && address.street.isEmpty()) {
       isValid = false;
     }
-    if (suburb == true && this.suburb.isEmpty()) {
+    if (suburb == true && address.suburb.isEmpty()) {
       isValid = false;
     }
-    if (city == true && this.city.isEmpty()) {
+    if (city == true && address.city.isEmpty()) {
       isValid = false;
     }
-    if (postalCode == true && this.postalCode.isEmpty()) {
+    if (postalCode == true && address.postalCode.isEmpty()) {
       isValid = false;
     }
     //validation for passwords. Checks if the fields match.
@@ -65,7 +62,6 @@ class Vendor {
     return isValid;
   }
 
-  //TODO Remove if initial avatar is to be icon and not initials
   //Returns vendor initials as a String
   String getInitials() {
     String _initials;
@@ -79,11 +75,18 @@ class Vendor {
         'lastname': lastName.getValue(),
         'cell': cell.getValue().replaceAll(' ', ''),
         'email': email.getValue(),
-        'street': street.getValue(),
-        'suburb': suburb.getValue(),
-        'city': city.getValue(),
-        'postalcode': postalCode.getValue(),
+        'street': address.street.getValue(),
+        'suburb': address.suburb.getValue(),
+        'city': address.city.getValue(),
+        'postalcode': address.postalCode.getValue(),
         'password': password.getValue(),
         'newsletter': newsletter,
       };
+}
+
+class Address {
+  InputProperties street = InputProperties();
+  InputProperties suburb = InputProperties();
+  InputProperties city = InputProperties();
+  InputProperties postalCode = InputProperties();
 }
