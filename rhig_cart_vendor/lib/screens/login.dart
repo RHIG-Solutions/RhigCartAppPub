@@ -5,7 +5,7 @@ import 'package:rhig_cart_vendor/reusables/title_block.dart';
 import 'package:rhig_cart_vendor/styles.dart';
 import 'package:rhig_cart_vendor/reusables/inputs.dart';
 import 'package:rhig_cart_vendor/reusables/buttons.dart';
-import 'package:rhig_cart_vendor/models/vendor_model.dart';
+import 'package:rhig_cart_vendor/models/edit_vendor_model.dart';
 import 'package:rhig_cart_vendor/models/login_model.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -153,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
           buildTextButton(
               label: 'Sign Up',
               onPressed: () {
-                Vendor myVendor = Vendor();
+                EditVendor myVendor = EditVendor();
                 Navigator.pushNamed(context, '/signup1', arguments: myVendor);
               })
         ],

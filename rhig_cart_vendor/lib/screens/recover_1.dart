@@ -15,7 +15,7 @@ class Recover1 extends StatefulWidget {
 }
 
 class _Recover1State extends State<Recover1> {
-  final Recovery _myRecovery = Recovery();
+  final RecoveryVerification _myRecovery = RecoveryVerification();
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +104,7 @@ class _Recover1State extends State<Recover1> {
             setState(() {
               if (_myRecovery.isValid()) {
                 Navigator.pushNamed(context, '/recover2',
-                    arguments: _myRecovery.cell);
+                    arguments: _myRecovery);
               }
             });
           }),

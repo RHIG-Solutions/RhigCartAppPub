@@ -7,11 +7,11 @@ import 'package:rhig_cart_vendor/styles.dart';
 import 'package:rhig_cart_vendor/reusables/inputs.dart';
 import 'package:rhig_cart_vendor/reusables/buttons.dart';
 import 'package:rhig_cart_vendor/reusables/page_counter.dart';
-import 'package:rhig_cart_vendor/models/vendor_model.dart';
+import 'package:rhig_cart_vendor/models/edit_vendor_model.dart';
 
 class SignUp1 extends StatefulWidget {
-  final Vendor myVendor;
-  const SignUp1(this.myVendor, {Key? key}) : super(key: key);
+  final EditVendor myVendorEdit;
+  const SignUp1(this.myVendorEdit, {Key? key}) : super(key: key);
 
   @override
   State<SignUp1> createState() => _SignUp1State();
@@ -92,23 +92,23 @@ class _SignUp1State extends State<SignUp1> {
         children: [
           //Input First Name
           InputField(
-              node: widget.myVendor.firstName.node,
-              nextNode: widget.myVendor.lastName.node,
-              controller: widget.myVendor.firstName.controller,
+              node: widget.myVendorEdit.firstName.node,
+              nextNode: widget.myVendorEdit.lastName.node,
+              controller: widget.myVendorEdit.firstName.controller,
               label: 'First Name',
               hint: 'First Name',
-              errorText: widget.myVendor.firstName.error,
+              errorText: widget.myVendorEdit.firstName.error,
               hasIcon: true,
               icon: Icons.perm_identity),
           SizedBox(height: kInputSpacer),
           //Input Last Name
           InputField(
-              node: widget.myVendor.lastName.node,
-              nextNode: widget.myVendor.lastName.node,
-              controller: widget.myVendor.lastName.controller,
+              node: widget.myVendorEdit.lastName.node,
+              nextNode: widget.myVendorEdit.lastName.node,
+              controller: widget.myVendorEdit.lastName.controller,
               label: 'Last Name',
               hint: 'Last Name',
-              errorText: widget.myVendor.lastName.error,
+              errorText: widget.myVendorEdit.lastName.error,
               hasIcon: true,
               icon: Icons.perm_identity,
               isLast: true),
@@ -125,9 +125,10 @@ class _SignUp1State extends State<SignUp1> {
           label: 'CONTINUE',
           onPressed: () {
             setState(() {
-              if (widget.myVendor.isValid(firstName: true, lastName: true)) {
+              if (widget.myVendorEdit
+                  .isValid(firstName: true, lastName: true)) {
                 Navigator.pushReplacementNamed(context, '/signup2',
-                    arguments: widget.myVendor);
+                    arguments: widget.myVendorEdit);
               }
             });
           }),

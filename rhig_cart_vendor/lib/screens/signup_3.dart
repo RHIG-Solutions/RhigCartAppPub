@@ -7,11 +7,11 @@ import 'package:rhig_cart_vendor/styles.dart';
 import 'package:rhig_cart_vendor/reusables/inputs.dart';
 import 'package:rhig_cart_vendor/reusables/buttons.dart';
 import 'package:rhig_cart_vendor/reusables/page_counter.dart';
-import 'package:rhig_cart_vendor/models/vendor_model.dart';
+import 'package:rhig_cart_vendor/models/edit_vendor_model.dart';
 
 class SignUp3 extends StatefulWidget {
-  final Vendor myVendor;
-  const SignUp3(this.myVendor, {Key? key}) : super(key: key);
+  final EditVendor myVendorEdit;
+  const SignUp3(this.myVendorEdit, {Key? key}) : super(key: key);
 
   @override
   State<SignUp3> createState() => _SignUp3State();
@@ -69,7 +69,9 @@ class _SignUp3State extends State<SignUp3> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           buildTitleWithBackReplacement(context,
-              title: 'REGISTER', target: '/signup2', myVendor: widget.myVendor),
+              title: 'REGISTER',
+              target: '/signup2',
+              myVendor: widget.myVendorEdit),
           SizedBox(height: kTopSpacer1),
           const Text('And,', style: kHeader1Style),
           const Text(
@@ -93,45 +95,45 @@ class _SignUp3State extends State<SignUp3> {
         children: [
           //Input Street name and number
           InputField(
-              node: widget.myVendor.address.street.node,
-              nextNode: widget.myVendor.address.suburb.node,
-              controller: widget.myVendor.address.street.controller,
+              node: widget.myVendorEdit.address.street.node,
+              nextNode: widget.myVendorEdit.address.suburb.node,
+              controller: widget.myVendorEdit.address.street.controller,
               label: 'Street',
               hint: 'Street',
-              errorText: widget.myVendor.address.street.error,
+              errorText: widget.myVendorEdit.address.street.error,
               hasIcon: true,
               icon: Icons.location_on_outlined),
           SizedBox(height: kInputSpacer),
           //Input Suburb - Optional field
           InputField(
-              node: widget.myVendor.address.suburb.node,
-              nextNode: widget.myVendor.address.city.node,
-              controller: widget.myVendor.address.suburb.controller,
+              node: widget.myVendorEdit.address.suburb.node,
+              nextNode: widget.myVendorEdit.address.city.node,
+              controller: widget.myVendorEdit.address.suburb.controller,
               label: 'Suburb',
               hint: 'Suburb',
-              errorText: widget.myVendor.address.suburb.error,
+              errorText: widget.myVendorEdit.address.suburb.error,
               hasIcon: true,
               icon: Icons.location_on_outlined),
           SizedBox(height: kInputSpacer),
           //Input City
           InputField(
-              node: widget.myVendor.address.city.node,
-              nextNode: widget.myVendor.address.postalCode.node,
-              controller: widget.myVendor.address.city.controller,
+              node: widget.myVendorEdit.address.city.node,
+              nextNode: widget.myVendorEdit.address.postalCode.node,
+              controller: widget.myVendorEdit.address.city.controller,
               label: 'City',
               hint: 'City',
-              errorText: widget.myVendor.address.city.error,
+              errorText: widget.myVendorEdit.address.city.error,
               hasIcon: true,
               icon: Icons.location_on_outlined),
           SizedBox(height: kInputSpacer),
           //Input Postal Code - is a number
           InputField(
-              node: widget.myVendor.address.postalCode.node,
-              nextNode: widget.myVendor.address.postalCode.node,
-              controller: widget.myVendor.address.postalCode.controller,
+              node: widget.myVendorEdit.address.postalCode.node,
+              nextNode: widget.myVendorEdit.address.postalCode.node,
+              controller: widget.myVendorEdit.address.postalCode.controller,
               label: 'Postal Code',
               hint: 'Postal Code',
-              errorText: widget.myVendor.address.postalCode.error,
+              errorText: widget.myVendorEdit.address.postalCode.error,
               hasIcon: true,
               icon: Icons.location_on_outlined,
               isNumber: true,
@@ -149,10 +151,10 @@ class _SignUp3State extends State<SignUp3> {
           label: 'CONTINUE',
           onPressed: () {
             setState(() {
-              if (widget.myVendor
+              if (widget.myVendorEdit
                   .isValid(street: true, city: true, postalCode: true)) {
                 Navigator.pushReplacementNamed(context, '/signup4',
-                    arguments: widget.myVendor);
+                    arguments: widget.myVendorEdit);
               }
             });
           }),

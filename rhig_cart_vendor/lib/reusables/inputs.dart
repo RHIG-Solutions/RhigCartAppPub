@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rhig_cart_vendor/models/vendor_model.dart';
+import 'package:rhig_cart_vendor/models/edit_vendor_model.dart';
 import 'package:rhig_cart_vendor/styles.dart';
 import 'package:rhig_cart_vendor/reusables/input_formats.dart';
 
@@ -167,7 +167,7 @@ class _OTPFieldState extends State<OTPField> {
 //Build checkbox field
 class CheckBoxField extends StatefulWidget {
   final String label;
-  final Vendor myVendor;
+  final EditVendor myVendor;
   const CheckBoxField({Key? key, required this.label, required this.myVendor})
       : super(key: key);
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rhig_cart_vendor/models/recovery_model.dart';
 import 'package:rhig_cart_vendor/reusables/constants.dart';
 import 'package:rhig_cart_vendor/reusables/screenart.dart';
 import 'package:rhig_cart_vendor/reusables/title_block.dart';
@@ -8,8 +9,8 @@ import 'package:rhig_cart_vendor/reusables/buttons.dart';
 import 'package:rhig_cart_vendor/models/otp_model.dart';
 
 class Recover2 extends StatefulWidget {
-  final String cell;
-  const Recover2(this.cell, {Key? key}) : super(key: key);
+  final RecoveryVerification myRecovery;
+  const Recover2(this.myRecovery, {Key? key}) : super(key: key);
 
   @override
   State<Recover2> createState() => _Recover2State();
@@ -68,7 +69,9 @@ class _Recover2State extends State<Recover2> {
           SizedBox(height: kTopSpacer1),
           const Text('Verify OTP,', style: kHeader1Style),
           Text(
-            'We\'ve sent an OTP to XXX XXX ' + widget.cell.substring(6) + '.',
+            'We\'ve sent an OTP to XXX XXX ' +
+                widget.myRecovery.cell.substring(6) +
+                '.',
             style: kStandardWhiteStyle,
           ),
         ],
@@ -158,7 +161,8 @@ class _Recover2State extends State<Recover2> {
             //TODO Implement OTP check and what must be displayed if correct
             setState(() {
               if (_myOTP.combine() == '1234') {
-                Navigator.pushNamed(context, '/');
+                Navigator.pushNamed(context, '/recover3',
+                    arguments: widget.myRecovery);
               } else {
                 //TODO remove print when proper implementation is done
                 print('Incorrect');

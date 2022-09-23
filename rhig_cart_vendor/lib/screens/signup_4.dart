@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rhig_cart_vendor/models/vendor_model.dart';
 import 'package:rhig_cart_vendor/reusables/constants.dart';
 import 'package:rhig_cart_vendor/reusables/misc_elements.dart';
 import 'package:rhig_cart_vendor/reusables/screenart.dart';
@@ -7,15 +8,17 @@ import 'package:rhig_cart_vendor/styles.dart';
 import 'package:rhig_cart_vendor/reusables/inputs.dart';
 import 'package:rhig_cart_vendor/reusables/buttons.dart';
 import 'package:rhig_cart_vendor/reusables/page_counter.dart';
-import 'package:rhig_cart_vendor/models/vendor_model.dart';
+import 'package:rhig_cart_vendor/models/edit_vendor_model.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'dart:convert';
+import 'dart:typed_data';
 
 enum Sources { gallery, camera }
 
 class SignUp4 extends StatefulWidget {
-  final Vendor myVendor;
-  const SignUp4(this.myVendor, {Key? key}) : super(key: key);
+  final EditVendor myVendorEdit;
+  const SignUp4(this.myVendorEdit, {Key? key}) : super(key: key);
 
   @override
   State<SignUp4> createState() => _SignUp4State();
@@ -24,6 +27,7 @@ class SignUp4 extends StatefulWidget {
 class _SignUp4State extends State<SignUp4> {
   File? _image;
   final _picker = ImagePicker();
+  Vendor myVendor = Vendor();
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +80,9 @@ class _SignUp4State extends State<SignUp4> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           buildTitleWithBackReplacement(context,
-              title: 'REGISTER', target: '/signup3', myVendor: widget.myVendor),
+              title: 'REGISTER',
+              target: '/signup3',
+              myVendor: widget.myVendorEdit),
           //TODO Implement avatar image conversion, add to model and implement upload
           GestureDetector(
             child: CircleAvatar(
@@ -88,7 +94,7 @@ class _SignUp4State extends State<SignUp4> {
               child: _image != null
                   ? null
                   : Text(
-                      widget.myVendor.getInitials(),
+                      widget.myVendorEdit.getInitials(),
                       style: kAvatarTextStyle,
                     ),
             ),
@@ -97,7 +103,7 @@ class _SignUp4State extends State<SignUp4> {
             },
           ),
           //Display Vendor firstname
-          Text('${widget.myVendor.firstName.controller.text}?',
+          Text('${widget.myVendorEdit.firstName.controller.text}?',
               style: kHeader1Style),
           const Text(
             'Please choose your password',
@@ -120,24 +126,24 @@ class _SignUp4State extends State<SignUp4> {
         children: [
           //Input Password
           InputField(
-              node: widget.myVendor.password.node,
-              nextNode: widget.myVendor.passwordCheck.node,
-              controller: widget.myVendor.password.controller,
+              node: widget.myVendorEdit.password.password.node,
+              nextNode: widget.myVendorEdit.password.passwordCheck.node,
+              controller: widget.myVendorEdit.password.password.controller,
               label: 'Password',
               hint: 'Password',
               isPassword: true,
-              errorText: widget.myVendor.password.error),
+              errorText: widget.myVendorEdit.password.password.error),
           SizedBox(height: kInputSpacer),
           //Input Repeat of password for verification
           InputField(
-              node: widget.myVendor.passwordCheck.node,
-              nextNode: widget.myVendor.passwordCheck.node,
-              controller: widget.myVendor.passwordCheck.controller,
+              node: widget.myVendorEdit.password.passwordCheck.node,
+              nextNode: widget.myVendorEdit.password.passwordCheck.node,
+              controller: widget.myVendorEdit.password.passwordCheck.controller,
               label: 'Repeat Password',
               hint: 'Password',
               isPassword: true,
               isLast: true,
-              errorText: widget.myVendor.passwordCheck.error),
+              errorText: widget.myVendorEdit.password.passwordCheck.error),
         ],
       ),
     );
@@ -150,13 +156,24 @@ class _SignUp4State extends State<SignUp4> {
       child: buildBottomButton(
           label: 'CONTINUE',
           onPressed: () {
-            setState(() {
-              if (widget.myVendor.isValid(password: true)) {
-                //TODO Implement server side checks etc
-                Navigator.pushReplacementNamed(context, '/welcome',
-                    arguments: widget.myVendor.email.toString());
+            //TODO Implement server side checks etc
+            if (widget.myVendorEdit.isValid(password: true)) {
+              if (_image != null) {
+                widget.myVendorEdit.encodeProfileImage(_image!);
               }
-            });
+              myVendor = widget.myVendorEdit.assignValues();
+              print(myVendor.profileImage);
+              // if (_image != null) {
+              //   Uint8List imagebytes =
+              //       await _image!.readAsBytes(); //convert to bytes
+              //   widget.myVendorEdit.profileImage = base64.encode(imagebytes);
+              // } //convert bytes to base64 string
+
+              setState(() {
+                Navigator.pushReplacementNamed(context, '/welcome',
+                    arguments: widget.myVendorEdit.email.toString());
+              });
+            }
           }),
     );
   }

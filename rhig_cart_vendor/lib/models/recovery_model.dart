@@ -1,11 +1,11 @@
 import 'input_properties.dart';
 
-class Recovery {
+class RecoveryVerification {
   //TODO Verify data types and correct as needed
   InputProperties email = InputProperties();
   String cell = '';
 
-  Recovery();
+  RecoveryVerification();
 
   //Checks if the Email address is present and valid, and sets appropriate error message
   bool isValid() {
@@ -26,5 +26,6 @@ class Recovery {
 
   Map<String, dynamic> toJson() => {'email': email.getValue()};
 
-  Recovery.fromJson(Map<String, dynamic> json) : cell = json['cell'];
+  RecoveryVerification.fromJson(Map<String, dynamic> json)
+      : cell = json['cell'];
 }

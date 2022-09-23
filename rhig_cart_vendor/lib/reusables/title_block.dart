@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rhig_cart_vendor/styles.dart';
-import 'package:rhig_cart_vendor/models/vendor_model.dart';
+import 'package:rhig_cart_vendor/models/edit_vendor_model.dart';
 
 //Edge spaces for Icons and controls, used to center title
 const double _spacer = 50;
@@ -42,7 +42,9 @@ Widget buildTitleWithPopBack(BuildContext context, {required String title}) {
 
 //Build title with targeted back button that passes Vendor info
 Widget buildTitleWithBackReplacement(BuildContext context,
-    {required String title, required String target, required Vendor myVendor}) {
+    {required String title,
+    required String target,
+    required EditVendor myVendor}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [

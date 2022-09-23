@@ -7,11 +7,11 @@ import 'package:rhig_cart_vendor/styles.dart';
 import 'package:rhig_cart_vendor/reusables/inputs.dart';
 import 'package:rhig_cart_vendor/reusables/buttons.dart';
 import 'package:rhig_cart_vendor/reusables/page_counter.dart';
-import 'package:rhig_cart_vendor/models/vendor_model.dart';
+import 'package:rhig_cart_vendor/models/edit_vendor_model.dart';
 
 class SignUp2 extends StatefulWidget {
-  final Vendor myVendor;
-  const SignUp2(this.myVendor, {Key? key}) : super(key: key);
+  final EditVendor myVendorEdit;
+  const SignUp2(this.myVendorEdit, {Key? key}) : super(key: key);
 
   @override
   State<SignUp2> createState() => _SignUp2State();
@@ -69,7 +69,9 @@ class _SignUp2State extends State<SignUp2> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           buildTitleWithBackReplacement(context,
-              title: 'REGISTER', target: '/signup1', myVendor: widget.myVendor),
+              title: 'REGISTER',
+              target: '/signup1',
+              myVendor: widget.myVendorEdit),
           SizedBox(height: kTopSpacer1),
           const Text('And,', style: kHeader1Style),
           const Text(
@@ -93,25 +95,25 @@ class _SignUp2State extends State<SignUp2> {
         children: [
           //Input Cell Number - Is a number
           InputField(
-              node: widget.myVendor.cell.node,
-              nextNode: widget.myVendor.email.node,
-              controller: widget.myVendor.cell.controller,
+              node: widget.myVendorEdit.cell.node,
+              nextNode: widget.myVendorEdit.email.node,
+              controller: widget.myVendorEdit.cell.controller,
               label: 'Cell Number',
               hint: '000 000 0000',
               isNumber: true,
               isCellNumber: true,
-              errorText: widget.myVendor.cell.error,
+              errorText: widget.myVendorEdit.cell.error,
               hasIcon: true,
               icon: Icons.phone),
           SizedBox(height: kInputSpacer),
           //Input Email Address
           InputField(
-              node: widget.myVendor.email.node,
-              nextNode: widget.myVendor.email.node,
-              controller: widget.myVendor.email.controller,
+              node: widget.myVendorEdit.email.node,
+              nextNode: widget.myVendorEdit.email.node,
+              controller: widget.myVendorEdit.email.controller,
               label: 'Email Address',
               hint: 'Email Address',
-              errorText: widget.myVendor.email.error,
+              errorText: widget.myVendorEdit.email.error,
               hasIcon: true,
               icon: Icons.mail_outline,
               isLast: true),
@@ -119,7 +121,7 @@ class _SignUp2State extends State<SignUp2> {
           //Choose to receive newsletter or not
           CheckBoxField(
               label: 'Include on newsletter and updates.',
-              myVendor: widget.myVendor),
+              myVendor: widget.myVendorEdit),
         ],
       ),
     );
@@ -133,9 +135,9 @@ class _SignUp2State extends State<SignUp2> {
           label: 'CONTINUE',
           onPressed: () {
             setState(() {
-              if (widget.myVendor.isValid(cell: true, email: true)) {
+              if (widget.myVendorEdit.isValid(cell: true, email: true)) {
                 Navigator.pushReplacementNamed(context, '/signup3',
-                    arguments: widget.myVendor);
+                    arguments: widget.myVendorEdit);
               }
             });
           }),
