@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:rhig_cart_vendor/models/recovery_model.dart';
-import 'package:rhig_cart_vendor/reusables/constants.dart';
-import 'package:rhig_cart_vendor/screens/login.dart';
-import 'package:rhig_cart_vendor/screens/password_reset_success.dart';
-import 'package:rhig_cart_vendor/screens/recover_1.dart';
-import 'package:rhig_cart_vendor/screens/recover_2.dart';
-import 'package:rhig_cart_vendor/screens/recover_3.dart';
-import 'package:rhig_cart_vendor/screens/test.dart';
-import 'package:rhig_cart_vendor/screens/signup_1.dart';
-import 'package:rhig_cart_vendor/screens/signup_2.dart';
-import 'package:rhig_cart_vendor/screens/signup_3.dart';
-import 'package:rhig_cart_vendor/screens/signup_4.dart';
-import 'package:rhig_cart_vendor/screens/welcome.dart';
-import 'package:rhig_cart_vendor/styles.dart';
+import 'package:rhig_cart_vendor/screens/login_screen.dart';
+import 'package:rhig_cart_vendor/screens/password_reset_success_screen.dart';
+import 'package:rhig_cart_vendor/screens/recover_1_screen.dart';
+import 'package:rhig_cart_vendor/screens/recover_2_screen.dart';
+import 'package:rhig_cart_vendor/screens/recover_3_screen.dart';
+import 'package:rhig_cart_vendor/screens/test_screen.dart';
+import 'package:rhig_cart_vendor/screens/signup_1_screen.dart';
+import 'package:rhig_cart_vendor/screens/signup_2_screen.dart';
+import 'package:rhig_cart_vendor/screens/signup_3_screen.dart';
+import 'package:rhig_cart_vendor/screens/signup_4_screen.dart';
+import 'package:rhig_cart_vendor/screens/welcome_screen.dart';
 import 'package:rhig_cart_vendor/models/edit_vendor_model.dart';
+import 'package:rhig_cart_vendor/screens/theme_selector_screen.dart';
 
 void main() => runApp(const RhigCartVendor());
 
@@ -29,39 +28,13 @@ class _RhigCartVendorState extends State<RhigCartVendor> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(accentColor: kRHIGDarkGreen),
-        scaffoldBackgroundColor: kRHIGBackGround,
         fontFamily: 'AvinerNext',
-        textSelectionTheme: const TextSelectionThemeData(
-          cursorColor: kRHIGDarkGreen,
-          selectionHandleColor: kRHIGDarkGreen,
-          selectionColor: kSelection,
-        ),
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(primary: kRHIGGrey),
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-            errorBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.transparent),
-                borderRadius: BorderRadius.all(Radius.circular(kInputRadius))),
-            focusedErrorBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.transparent),
-                borderRadius: BorderRadius.all(Radius.circular(kInputRadius))),
-            enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.transparent),
-                borderRadius: BorderRadius.all(Radius.circular(kInputRadius))),
-            focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: kRHIGDarkGreen),
-                borderRadius: BorderRadius.all(Radius.circular(kInputRadius)))),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-              primary: kRHIGDarkGreen, onPrimary: kRHIGBackGround),
-        ),
       ),
       routes: {
         '/': (context) => const LoginScreen(),
         '/recover1': (context) => const Recover1(),
         '/passwordresetsuccess': (context) => const PasswordResetSuccess(),
+        '/themeselector': (context) => const ThemeSelector(),
         '/test': (context) => const Test(), //TODO: Remove test route when done
       },
       onGenerateRoute: (settings) {

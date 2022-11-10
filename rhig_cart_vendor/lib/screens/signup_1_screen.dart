@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:rhig_cart_vendor/reusables/constants.dart';
+import 'package:rhig_cart_vendor/constants.dart';
 import 'package:rhig_cart_vendor/reusables/misc_elements.dart';
 import 'package:rhig_cart_vendor/reusables/screenart.dart';
 import 'package:rhig_cart_vendor/reusables/title_block.dart';
-import 'package:rhig_cart_vendor/styles.dart';
+import 'package:rhig_cart_vendor/theme_controller.dart';
+import 'package:rhig_cart_vendor/screens/loading_screen.dart';
 import 'package:rhig_cart_vendor/reusables/inputs.dart';
 import 'package:rhig_cart_vendor/reusables/buttons.dart';
 import 'package:rhig_cart_vendor/reusables/page_counter.dart';
@@ -20,45 +21,57 @@ class SignUp1 extends StatefulWidget {
 class _SignUp1State extends State<SignUp1> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: LayoutBuilder(
-          builder: (context, constraint) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraint.maxHeight),
-                child: IntrinsicHeight(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        height: kTopArtHeight,
-                        child: Stack(
+    return ValueListenableBuilder(
+      valueListenable: myPrefs.loadNotifier,
+      builder: (context, value, _) {
+        if (myPrefs.loadComplete == false) {
+          return loadingScreen();
+        } else {
+          return Scaffold(
+            backgroundColor: Color(myPrefs.dColourBackground),
+            body: GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: LayoutBuilder(
+                builder: (context, constraint) {
+                  return SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints:
+                          BoxConstraints(minHeight: constraint.maxHeight),
+                      child: IntrinsicHeight(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            //Display top arc
-                            topArt(),
-                            //Display page description and information
-                            buildPageDescription(context),
+                            SizedBox(
+                              width: double.infinity,
+                              height: kTopArtHeight,
+                              child: Stack(
+                                children: [
+                                  //Display top arc
+                                  topArt(myPrefs: myPrefs),
+                                  //Display page description and information
+                                  buildPageDescription(context),
+                                ],
+                              ),
+                            ),
+                            buildPageInputSection(),
+                            Expanded(child: Container(height: 20.0)),
+                            buildContinueButton(context, myPrefs: myPrefs),
+                            SizedBox(
+                              height: kBottomButtonSpace,
+                              child: buildAlreadyHaveAccountRow(context,
+                                  myPrefs: myPrefs),
+                            ),
                           ],
                         ),
                       ),
-                      buildPageInputSection(),
-                      Expanded(child: Container(height: 20.0)),
-                      buildContinueButton(context),
-                      SizedBox(
-                        height: kBottomButtonSpace,
-                        child: buildAlreadyHaveAccountRow(context),
-                      ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               ),
-            );
-          },
-        ),
-      ),
+            ),
+          );
+        }
+      },
     );
   }
 
@@ -118,13 +131,16 @@ class _SignUp1State extends State<SignUp1> {
   }
 
   //Builds Continue button at bottom of page
-  Padding buildContinueButton(BuildContext context) {
+  Padding buildContinueButton(BuildContext context,
+      {required PreferenceController myPrefs}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: kMarginMain),
       child: buildBottomButton(
+          myPrefs: myPrefs,
           label: 'CONTINUE',
           onPressed: () {
             setState(() {
+              //Checks to see if all required fields contain data
               if (widget.myVendorEdit
                   .isValid(firstName: true, lastName: true)) {
                 Navigator.pushReplacementNamed(context, '/signup2',

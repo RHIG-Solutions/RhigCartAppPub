@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:rhig_cart_vendor/reusables/constants.dart';
+import 'package:rhig_cart_vendor/constants.dart';
 import 'package:rhig_cart_vendor/reusables/screenart.dart';
 import 'package:rhig_cart_vendor/reusables/title_block.dart';
-import 'package:rhig_cart_vendor/styles.dart';
 import 'package:rhig_cart_vendor/reusables/inputs.dart';
 import 'package:rhig_cart_vendor/reusables/buttons.dart';
 import 'package:rhig_cart_vendor/models/edit_vendor_model.dart';
 import 'package:rhig_cart_vendor/models/login_model.dart';
+import 'package:rhig_cart_vendor/theme_controller.dart';
+import 'package:rhig_cart_vendor/screens/loading_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -20,43 +21,54 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: LayoutBuilder(
-          builder: (context, constraint) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraint.maxHeight),
-                child: IntrinsicHeight(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        height: kTopArtHeight,
-                        child: Stack(
+    return ValueListenableBuilder(
+      valueListenable: myPrefs.loadNotifier,
+      builder: (context, value, _) {
+        if (myPrefs.loadComplete == false) {
+          return loadingScreen();
+        } else {
+          return Scaffold(
+            backgroundColor: Color(myPrefs.dColourBackground),
+            body: GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: LayoutBuilder(
+                builder: (context, constraint) {
+                  return SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints:
+                          BoxConstraints(minHeight: constraint.maxHeight),
+                      child: IntrinsicHeight(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            topArt(),
-                            buildPageDescription(),
+                            SizedBox(
+                              width: double.infinity,
+                              height: kTopArtHeight,
+                              child: Stack(
+                                children: [
+                                  topArt(myPrefs: myPrefs),
+                                  buildPageDescription(),
+                                ],
+                              ),
+                            ),
+                            //Builds main input section
+                            buildInputSection(context),
+                            Expanded(child: Container(height: 20.0)),
+                            //Builds Sign In Button
+                            buildSignInButton(context),
+                            //Builds row with Sign Up button
+                            buildSignupRow(context),
                           ],
                         ),
                       ),
-                      //Builds main input section
-                      buildInputSection(context),
-                      Expanded(child: Container(height: 20.0)),
-                      //Builds Sign In Button
-                      buildSignInButton(context),
-                      //Builds row with Sign Up button
-                      buildSignupRow(context),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               ),
-            );
-          },
-        ),
-      ),
+            ),
+          );
+        }
+      },
     );
   }
 
@@ -72,6 +84,13 @@ class _LoginScreenState extends State<LoginScreen> {
             'Sign in to continue',
             style: kStandardWhiteStyle,
           ),
+          //TODO Remove temp menu button, here only for testing theme switching
+          IconButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/themeselector');
+            },
+            icon: const Icon(Icons.menu),
+          )
         ],
       ),
     );
@@ -105,7 +124,8 @@ class _LoginScreenState extends State<LoginScreen> {
               label: 'Your Password',
               hint: 'Password',
               isLast: true,
-              isPassword: true),
+              isPassword: true,
+              errorText: _myLogin.password.error),
           //Forgot password button
           Align(
             alignment: Alignment.topRight,
@@ -125,6 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: kMarginMain),
       child: buildBottomButton(
+          myPrefs: myPrefs,
           label: 'SIGN IN',
           onPressed: () {
             setState(() {
@@ -146,9 +167,9 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
+          Text(
             'Don\'t have an account?',
-            style: TextStyle(color: kRHIGDarkGreen),
+            style: TextStyle(color: Color(myPrefs.dColourMain1)),
           ),
           buildTextButton(
               label: 'Sign Up',

@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:rhig_cart_vendor/models/vendor_model.dart';
-import 'package:rhig_cart_vendor/reusables/constants.dart';
+import 'package:rhig_cart_vendor/constants.dart';
 import 'package:rhig_cart_vendor/reusables/misc_elements.dart';
 import 'package:rhig_cart_vendor/reusables/screenart.dart';
 import 'package:rhig_cart_vendor/reusables/title_block.dart';
-import 'package:rhig_cart_vendor/styles.dart';
+import 'package:rhig_cart_vendor/theme_controller.dart';
+import 'package:rhig_cart_vendor/screens/loading_screen.dart';
 import 'package:rhig_cart_vendor/reusables/inputs.dart';
 import 'package:rhig_cart_vendor/reusables/buttons.dart';
 import 'package:rhig_cart_vendor/reusables/page_counter.dart';
 import 'package:rhig_cart_vendor/models/edit_vendor_model.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'dart:convert';
-import 'dart:typed_data';
+//import 'dart:convert';
+//import 'dart:typed_data';
 
 enum Sources { gallery, camera }
 
@@ -31,45 +32,57 @@ class _SignUp4State extends State<SignUp4> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: LayoutBuilder(
-          builder: (context, constraint) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraint.maxHeight),
-                child: IntrinsicHeight(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        height: kTopArtHeight,
-                        child: Stack(
+    return ValueListenableBuilder(
+      valueListenable: myPrefs.loadNotifier,
+      builder: (context, value, _) {
+        if (myPrefs.loadComplete == false) {
+          return loadingScreen();
+        } else {
+          return Scaffold(
+            backgroundColor: Color(myPrefs.dColourBackground),
+            body: GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: LayoutBuilder(
+                builder: (context, constraint) {
+                  return SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints:
+                          BoxConstraints(minHeight: constraint.maxHeight),
+                      child: IntrinsicHeight(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            //Display top arc
-                            topArt(),
-                            //Display page description and information
-                            buildPageDescription(context),
+                            SizedBox(
+                              width: double.infinity,
+                              height: kTopArtHeight,
+                              child: Stack(
+                                children: [
+                                  //Display top arc
+                                  topArt(myPrefs: myPrefs),
+                                  //Display page description and information
+                                  buildPageDescription(context),
+                                ],
+                              ),
+                            ),
+                            buildPageInputSection(),
+                            Expanded(child: Container(height: 20.0)),
+                            buildContinueButton(myPrefs: myPrefs),
+                            SizedBox(
+                              height: kBottomButtonSpace,
+                              child: buildAlreadyHaveAccountRow(context,
+                                  myPrefs: myPrefs),
+                            ),
                           ],
                         ),
                       ),
-                      buildPageInputSection(),
-                      Expanded(child: Container(height: 20.0)),
-                      buildContinueButton(),
-                      SizedBox(
-                        height: kBottomButtonSpace,
-                        child: buildAlreadyHaveAccountRow(context),
-                      ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               ),
-            );
-          },
-        ),
-      ),
+            ),
+          );
+        }
+      },
     );
   }
 
@@ -88,7 +101,7 @@ class _SignUp4State extends State<SignUp4> {
             child: CircleAvatar(
               //If image has been chosen, displays it
               backgroundImage: _image != null ? FileImage(_image!) : null,
-              backgroundColor: kRHIGLightGrey,
+              backgroundColor: kColourRHIGLightGrey,
               radius: kTopSpacer1 / 2,
               //If no image is chosen, Displays initials
               child: _image != null
@@ -150,18 +163,21 @@ class _SignUp4State extends State<SignUp4> {
   }
 
   //Builds Continue button at bottom of page
-  Padding buildContinueButton() {
+  Padding buildContinueButton({required PreferenceController myPrefs}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: kMarginMain),
       child: buildBottomButton(
+          myPrefs: myPrefs,
           label: 'CONTINUE',
           onPressed: () {
             //TODO Implement server side checks etc
+            //Checks to see if all required fields contain data
             if (widget.myVendorEdit.isValid(password: true)) {
               if (_image != null) {
                 widget.myVendorEdit.encodeProfileImage(_image!);
               }
               myVendor = widget.myVendorEdit.assignValues();
+              //TODO Fix image issues
               print(myVendor.profileImage);
               // if (_image != null) {
               //   Uint8List imagebytes =

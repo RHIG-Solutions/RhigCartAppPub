@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rhig_cart_vendor/models/edit_vendor_model.dart';
-import 'package:rhig_cart_vendor/styles.dart';
+import 'package:rhig_cart_vendor/theme_controller.dart';
 import 'package:rhig_cart_vendor/reusables/input_formats.dart';
+import 'package:rhig_cart_vendor/constants.dart';
 
 //Build Standard input field
 class InputField extends StatefulWidget {
@@ -46,57 +47,85 @@ class _InputFieldState extends State<InputField> {
   @override
   Widget build(BuildContext context) {
     String errorText = widget.errorText;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(widget.label, style: kLabelStyle),
-        TextField(
-          focusNode: widget.node,
-          controller: widget.controller,
-          keyboardType: widget.isNumber ? TextInputType.number : null,
-          inputFormatters: widget.isCellNumber ? [CellFormatter()] : null,
-          textInputAction:
-              widget.isLast ? TextInputAction.done : TextInputAction.next,
-          obscureText: widget.isPassword ? _passwordObscured : false,
-          obscuringCharacter: '*',
-          onSubmitted: (value) {
-            //The following line activates the keyboard for the next field when pressing the
-            //next button in the current field
-            widget.isLast
-                ? null
-                : FocusScope.of(context).requestFocus(widget.nextNode);
-          },
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: kInputBackground,
-            border: InputBorder.none,
-            hintText: (widget.hint),
-            hintStyle: kHintStyle,
-            contentPadding: const EdgeInsets.only(left: 15),
-            errorText: errorText.isNotEmpty ? errorText : null,
-            suffixIcon: widget.isPassword
-                ? IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _passwordObscured = !_passwordObscured;
-                      });
-                    },
-                    icon: Icon(
-                      _passwordObscured
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                      color: Colors.grey,
-                    ),
-                  )
-                : widget.hasIcon
-                    ? Icon(
-                        widget.icon,
-                        color: kRHIGLightGrey,
-                      )
-                    : null,
-          ),
+    return Theme(
+      data: ThemeData(
+        colorScheme:
+            ColorScheme.fromSwatch(accentColor: Color(myPrefs.dColourMain1)),
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: Color(myPrefs.dColourMain1),
+          selectionHandleColor: Color(myPrefs.dColourMain1),
+          selectionColor: myPrefs.dColourSelection,
         ),
-      ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(widget.label, style: kLabelStyle),
+          TextField(
+            focusNode: widget.node,
+            controller: widget.controller,
+            keyboardType: widget.isNumber ? TextInputType.number : null,
+            inputFormatters: widget.isCellNumber ? [CellFormatter()] : null,
+            textInputAction:
+                widget.isLast ? TextInputAction.done : TextInputAction.next,
+            obscureText: widget.isPassword ? _passwordObscured : false,
+            obscuringCharacter: '*',
+            onSubmitted: (value) {
+              //The following line activates the keyboard for the next field when pressing the
+              //next button in the current field
+              widget.isLast
+                  ? null
+                  : FocusScope.of(context).requestFocus(widget.nextNode);
+            },
+            cursorColor: Color(myPrefs.dColourMain1),
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: kColourInputBackground,
+              border: InputBorder.none,
+              hintText: (widget.hint),
+              hintStyle: kHintStyle,
+              contentPadding: const EdgeInsets.only(left: 15),
+              errorText: errorText.isNotEmpty ? errorText : null,
+              suffixIcon: widget.isPassword
+                  ? IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _passwordObscured = !_passwordObscured;
+                        });
+                      },
+                      icon: Icon(
+                        _passwordObscured
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: Colors.grey,
+                      ),
+                    )
+                  : widget.hasIcon
+                      ? Icon(
+                          widget.icon,
+                          color: kColourRHIGLightGrey,
+                        )
+                      : null,
+              errorBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.transparent),
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(kInputRadius))),
+              focusedErrorBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.transparent),
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(kInputRadius))),
+              enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.transparent),
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(kInputRadius))),
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(myPrefs.dColourMain1)),
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(kInputRadius))),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -105,6 +134,7 @@ class _InputFieldState extends State<InputField> {
 class OTPField extends StatefulWidget {
   final FocusNode node;
   final FocusNode nextNode;
+  final FocusNode lastNode;
   final TextEditingController controller;
   final bool isLast;
   final String errorText;
@@ -114,6 +144,7 @@ class OTPField extends StatefulWidget {
     Key? key,
     required this.node,
     required this.nextNode,
+    required this.lastNode,
     required this.controller,
     required this.isLast,
     this.errorText = '',
@@ -150,14 +181,26 @@ class _OTPFieldState extends State<OTPField> {
               ? widget.isLast
                   ? FocusScope.of(context).unfocus()
                   : FocusScope.of(context).requestFocus(widget.nextNode)
-              : null;
+              : FocusScope.of(context).requestFocus(widget.lastNode);
         },
         decoration: InputDecoration(
           filled: true,
-          fillColor: kInputBackground,
+          fillColor: kColourInputBackground,
           border: InputBorder.none,
           contentPadding: const EdgeInsets.only(top: 5),
           errorText: widget.errorText.isNotEmpty ? widget.errorText : null,
+          errorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.transparent),
+              borderRadius: BorderRadius.all(Radius.circular(kInputRadius))),
+          focusedErrorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.transparent),
+              borderRadius: BorderRadius.all(Radius.circular(kInputRadius))),
+          enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.transparent),
+              borderRadius: BorderRadius.all(Radius.circular(kInputRadius))),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Color(myPrefs.dColourMain1)),
+              borderRadius: BorderRadius.all(Radius.circular(kInputRadius))),
         ),
       ),
     );
@@ -168,7 +211,12 @@ class _OTPFieldState extends State<OTPField> {
 class CheckBoxField extends StatefulWidget {
   final String label;
   final EditVendor myVendor;
-  const CheckBoxField({Key? key, required this.label, required this.myVendor})
+  final PreferenceController myPrefs;
+  const CheckBoxField(
+      {Key? key,
+      required this.label,
+      required this.myVendor,
+      required this.myPrefs})
       : super(key: key);
 
   @override
@@ -182,7 +230,7 @@ class _CheckBoxFieldState extends State<CheckBoxField> {
       children: [
         Checkbox(
             value: widget.myVendor.newsletter,
-            activeColor: kRHIGDarkGreen,
+            activeColor: Color(widget.myPrefs.dColourMain1),
             onChanged: (bool? value) {
               setState(() {
                 widget.myVendor.newsletter = value!;

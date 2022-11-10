@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rhig_cart_vendor/styles.dart';
+import 'package:rhig_cart_vendor/theme_controller.dart';
 
 //Builds page counter. Defaulted to 4 pages, can override the default by sending
 //a new page total.
@@ -18,8 +18,8 @@ Widget buildPageCounter({required pageNumber, totalPages = 4}) {
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(20)),
                 border: Border.all(
-                    color: kRHIGGrey, width: i == pageNumber ? 6 : 0),
-                color: i == pageNumber ? Colors.white : kRHIGLightGrey,
+                    color: kColourRHIGGrey, width: i == pageNumber ? 6 : 0),
+                color: i == pageNumber ? Colors.white : kColourRHIGLightGrey,
               ),
             ),
           ),

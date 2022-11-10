@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:rhig_cart_vendor/styles.dart';
-import 'constants.dart';
+import 'package:rhig_cart_vendor/theme_controller.dart';
+import '../constants.dart';
 
 //Set of constants specific to the screen art
 
@@ -11,10 +11,10 @@ double arcStart = 60; // How far up the box the arc should start
 BoxDecoration rHIGGreyBackgroundDecoration = BoxDecoration(
   gradient: LinearGradient(
     colors: const [
-      kRHIGBackLightGrey,
-      kRHIGBackLightGrey,
-      kRHIGBackDarkGrey,
-      kRHIGBackDarkGrey
+      kColourRHIGBackLightGrey,
+      kColourRHIGBackLightGrey,
+      kColourRHIGBackDarkGrey,
+      kColourRHIGBackDarkGrey
     ],
     stops: [0, topArtSplitPercentage / 100, topArtSplitPercentage / 100, 1.0],
     begin: Alignment.centerLeft,
@@ -23,34 +23,37 @@ BoxDecoration rHIGGreyBackgroundDecoration = BoxDecoration(
 );
 
 //Paints Top Artwork for signup pages
-Widget topArt() {
+Widget topArt({required PreferenceController myPrefs}) {
   return Stack(
     children: [
       Row(
         children: [
           Flexible(
             flex: topArtSplitPercentage,
-            child: Container(color: kRHIGLightGreen),
+            child: Container(color: Color(myPrefs.dColourMain2)),
           ),
           Flexible(
             flex: 100 - topArtSplitPercentage,
-            child: Container(color: kRHIGDarkGreen),
+            child: Container(color: Color(myPrefs.dColourMain1)),
           ),
         ],
       ),
       SizedBox(
           width: double.infinity,
           height: kTopArtHeight,
-          child: CustomPaint(painter: CurvePainter())),
+          child: CustomPaint(
+              painter: CurvePainter(colour: myPrefs.dColourBackground))),
     ],
   );
 }
 
 class CurvePainter extends CustomPainter {
+  late final int colour;
+  CurvePainter({required this.colour});
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint();
-    paint.color = kRHIGBackGround;
+    paint.color = Color(colour);
 
     var path = Path();
     path.moveTo(0, size.height - arcStart);

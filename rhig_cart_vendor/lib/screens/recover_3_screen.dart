@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:rhig_cart_vendor/models/edit_password_model.dart';
 import 'package:rhig_cart_vendor/models/recovery_model.dart';
 import 'package:rhig_cart_vendor/models/vendor_model.dart';
-import 'package:rhig_cart_vendor/reusables/constants.dart';
+import 'package:rhig_cart_vendor/constants.dart';
 import 'package:rhig_cart_vendor/reusables/screenart.dart';
 import 'package:rhig_cart_vendor/reusables/title_block.dart';
-import 'package:rhig_cart_vendor/styles.dart';
+import 'package:rhig_cart_vendor/theme_controller.dart';
+import 'package:rhig_cart_vendor/screens/loading_screen.dart';
 import 'package:rhig_cart_vendor/reusables/inputs.dart';
 import 'package:rhig_cart_vendor/reusables/buttons.dart';
+import 'package:rhig_cart_vendor/reusables/misc_elements.dart';
 
 class Recover3 extends StatefulWidget {
   final RecoveryVerification myRecovery;
@@ -24,42 +26,58 @@ class _Recover3State extends State<Recover3> {
   Widget build(BuildContext context) {
     //Create vendor using verified email address
     Vendor myVendor = Vendor(user: widget.myRecovery.email.getValue());
-    return Scaffold(
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: LayoutBuilder(
-          builder: (context, constraint) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraint.maxHeight),
-                child: IntrinsicHeight(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        height: kTopArtHeight,
-                        child: Stack(
+    return ValueListenableBuilder(
+      valueListenable: myPrefs.loadNotifier,
+      builder: (context, value, _) {
+        if (myPrefs.loadComplete == false) {
+          return loadingScreen();
+        } else {
+          return Scaffold(
+            backgroundColor: Color(myPrefs.dColourBackground),
+            body: GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: LayoutBuilder(
+                builder: (context, constraint) {
+                  return SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints:
+                          BoxConstraints(minHeight: constraint.maxHeight),
+                      child: IntrinsicHeight(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            topArt(),
-                            buildPageDescription(myVendor),
+                            SizedBox(
+                              width: double.infinity,
+                              height: kTopArtHeight,
+                              child: Stack(
+                                children: [
+                                  topArt(myPrefs: myPrefs),
+                                  buildPageDescription(myVendor),
+                                ],
+                              ),
+                            ),
+                            //Builds main input section
+                            buildInputSection(context),
+                            Expanded(child: Container(height: 20.0)),
+                            //Builds Continue Button
+                            buildContinueButton(context,
+                                myVendor: myVendor, myPrefs: myPrefs),
+                            SizedBox(
+                              height: kBottomButtonSpace,
+                              child: buildReturnToLoginRow(context,
+                                  myPrefs: myPrefs),
+                            ),
                           ],
                         ),
                       ),
-                      //Builds main input section
-                      buildInputSection(context),
-                      Expanded(child: Container(height: 20.0)),
-                      //Builds Continue Button
-                      buildContinueButton(context, myVendor),
-                      SizedBox(height: kBottomButtonSpace),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               ),
-            );
-          },
-        ),
-      ),
+            ),
+          );
+        }
+      },
     );
   }
 
@@ -123,10 +141,12 @@ class _Recover3State extends State<Recover3> {
   }
 
   //Builds Continue Button
-  Padding buildContinueButton(BuildContext context, Vendor myVendor) {
+  Padding buildContinueButton(BuildContext context,
+      {required Vendor myVendor, required PreferenceController myPrefs}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: kMarginMain),
       child: buildBottomButton(
+          myPrefs: myPrefs,
           label: 'RESET PASSWORD',
           onPressed: () {
             setState(() {
