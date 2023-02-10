@@ -80,7 +80,6 @@ class PasswordResetSuccess extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: kMarginMain),
       child: buildBottomButton(
-          myPrefs: myPrefs,
           label: 'GO TO STORE',
           onPressed: () {
             //TODO Fix welcome page Continue button destination etc.

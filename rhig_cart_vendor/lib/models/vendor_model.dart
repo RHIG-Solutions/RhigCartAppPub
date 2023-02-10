@@ -8,22 +8,8 @@ class Vendor {
   Address address = Address();
   String password = '';
   bool newsletter = true;
-  //Base64 Profile image, if any
+  // Base64 Profile image, if any
   String profileImage = '';
-
-  Vendor({String user = ''}) {
-    if (user != '') {
-      //TODO Get user information from server and remove dummy creation
-      firstName = 'Test';
-      lastName = 'Case';
-      cell = '0123456789';
-      email = 'v@lid';
-      address = Address(user: user);
-      password = 'C';
-      newsletter = true;
-      profileImage = '';
-    }
-  }
 
   String getInitials() {
     String initials;

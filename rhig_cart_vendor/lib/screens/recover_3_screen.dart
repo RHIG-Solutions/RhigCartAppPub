@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rhig_cart_vendor/models/edit_password_model.dart';
 import 'package:rhig_cart_vendor/models/recovery_model.dart';
-import 'package:rhig_cart_vendor/models/vendor_model.dart';
 import 'package:rhig_cart_vendor/constants.dart';
 import 'package:rhig_cart_vendor/reusables/screenart.dart';
 import 'package:rhig_cart_vendor/reusables/title_block.dart';
@@ -20,12 +19,13 @@ class Recover3 extends StatefulWidget {
 }
 
 class _Recover3State extends State<Recover3> {
+  // Create password recovery object, containing needed data and checks
   EditPassword myPasswordEdit = EditPassword();
-
   @override
   Widget build(BuildContext context) {
-    //Create vendor using verified email address
-    Vendor myVendor = Vendor(user: widget.myRecovery.email.getValue());
+    // Gets relevant Vendor names from server
+    myPasswordEdit.getNames(email: widget.myRecovery.email.getValue());
+    // Checks if theming settings loaded, and shows appropriate screen
     return ValueListenableBuilder(
       valueListenable: myPrefs.loadNotifier,
       builder: (context, value, _) {
@@ -52,7 +52,7 @@ class _Recover3State extends State<Recover3> {
                               child: Stack(
                                 children: [
                                   topArt(myPrefs: myPrefs),
-                                  buildPageDescription(myVendor),
+                                  buildPageDescription(myPasswordEdit),
                                 ],
                               ),
                             ),
@@ -61,7 +61,7 @@ class _Recover3State extends State<Recover3> {
                             Expanded(child: Container(height: 20.0)),
                             //Builds Continue Button
                             buildContinueButton(context,
-                                myVendor: myVendor, myPrefs: myPrefs),
+                                myPasswordEdit: myPasswordEdit),
                             SizedBox(
                               height: kBottomButtonSpace,
                               child: buildReturnToLoginRow(context,
@@ -82,22 +82,25 @@ class _Recover3State extends State<Recover3> {
   }
 
   //Builds page description area
-  SafeArea buildPageDescription(Vendor myVendor) {
+  SafeArea buildPageDescription(EditPassword myPasswordEdit) {
     return SafeArea(
       child: Column(
         children: [
           buildTitleWithPopBack(context, title: 'RENEW PASSWORD'),
           SizedBox(height: kTopSpacer1),
           CircleAvatar(
+            backgroundColor: kColourRHIGLightGrey,
+            radius: kTopSpacer1 / 2,
             //TODO Implement avatar image check
             //If no image is present, Displays initials
             child: Text(
-              myVendor.getInitials(),
+              myPasswordEdit.getInitials(),
               style: kAvatarTextStyle,
             ),
           ),
           //Display Vendor firstname
-          Text('${myVendor.firstName}?', style: kHeader1Style),
+          Text('${myPasswordEdit.vendorNames.firstName}?',
+              style: kHeader1Style),
           const Text(
             'Please choose your new password',
             style: kStandardWhiteStyle,
@@ -142,17 +145,16 @@ class _Recover3State extends State<Recover3> {
 
   //Builds Continue Button
   Padding buildContinueButton(BuildContext context,
-      {required Vendor myVendor, required PreferenceController myPrefs}) {
+      {required EditPassword myPasswordEdit}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: kMarginMain),
       child: buildBottomButton(
-          myPrefs: myPrefs,
           label: 'RESET PASSWORD',
           onPressed: () {
             setState(() {
               if (myPasswordEdit.isValid()) {
-                myVendor.password = myPasswordEdit.getValue();
-                //TODO Implement server side checks etc
+                myPasswordEdit.updatePassword(
+                    email: widget.myRecovery.email.getValue());
                 Navigator.pushReplacementNamed(
                     context, '/passwordresetsuccess');
               }

@@ -10,8 +10,11 @@ double kTopSpacer1 = 50.0;
 //Space between top info and page counter
 double kTopSpacer2 = 30.0;
 
-//Margins on all pages
+//Margins on all login and setup pages
 double kMarginMain = 45.0;
+
+//Margin/spacer on store pages
+double kSpacerStore = 20.0;
 
 //Vertical size of buttons
 double kButtonHeight = 50.0;

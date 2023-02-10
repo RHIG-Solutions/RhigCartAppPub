@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:rhig_cart_vendor/models/vendor_model.dart';
 import 'package:rhig_cart_vendor/constants.dart';
 import 'package:rhig_cart_vendor/reusables/misc_elements.dart';
 import 'package:rhig_cart_vendor/reusables/screenart.dart';
@@ -28,7 +27,6 @@ class SignUp4 extends StatefulWidget {
 class _SignUp4State extends State<SignUp4> {
   File? _image;
   final _picker = ImagePicker();
-  Vendor myVendor = Vendor();
 
   @override
   Widget build(BuildContext context) {
@@ -167,30 +165,27 @@ class _SignUp4State extends State<SignUp4> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: kMarginMain),
       child: buildBottomButton(
-          myPrefs: myPrefs,
-          label: 'CONTINUE',
-          onPressed: () {
-            //TODO Implement server side checks etc
+        label: 'CONTINUE',
+        onPressed: () {
+          setState(() {
             //Checks to see if all required fields contain data
             if (widget.myVendorEdit.isValid(password: true)) {
               if (_image != null) {
                 widget.myVendorEdit.encodeProfileImage(_image!);
-              }
-              myVendor = widget.myVendorEdit.assignValues();
-              //TODO Fix image issues
-              print(myVendor.profileImage);
+              } //TODO Fix image issues
               // if (_image != null) {
               //   Uint8List imagebytes =
               //       await _image!.readAsBytes(); //convert to bytes
               //   widget.myVendorEdit.profileImage = base64.encode(imagebytes);
               // } //convert bytes to base64 string
 
-              setState(() {
-                Navigator.pushReplacementNamed(context, '/welcome',
-                    arguments: widget.myVendorEdit.email.toString());
-              });
+              widget.myVendorEdit.addVendorToServer();
+              Navigator.pushReplacementNamed(context, '/welcome',
+                  arguments: widget.myVendorEdit.email.toString());
             }
-          }),
+          });
+        },
+      ),
     );
   }
 

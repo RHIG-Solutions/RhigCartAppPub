@@ -15,9 +15,9 @@ class CellFormatter extends TextInputFormatter {
     } else {
       //Adds spaces after 3 and 6 digits
       if (newText.length > 3) {
-        newText = newText.substring(0, 3) + ' ' + newText.substring(3);
+        newText = '${newText.substring(0, 3)} ${newText.substring(3)}';
         if (newText.length > 7) {
-          newText = newText.substring(0, 7) + ' ' + newText.substring(7);
+          newText = '${newText.substring(0, 7)} ${newText.substring(7)}';
         }
       }
     }

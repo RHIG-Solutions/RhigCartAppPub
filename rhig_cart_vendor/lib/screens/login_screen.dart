@@ -21,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Checks if theming settings loaded, and shows appropriate screen
     return ValueListenableBuilder(
       valueListenable: myPrefs.loadNotifier,
       builder: (context, value, _) {
@@ -145,18 +146,18 @@ class _LoginScreenState extends State<LoginScreen> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: kMarginMain),
       child: buildBottomButton(
-          myPrefs: myPrefs,
           label: 'SIGN IN',
           onPressed: () {
             setState(() {
               if (_myLogin.successful()) {
                 _myLogin.password.error = '';
-                Navigator.pushNamed(context, '/test');
+                Navigator.pushReplacementNamed(context, '/dashboard',
+                    arguments: _myLogin.loggedInAccount);
               } else {
                 _myLogin.password.error = 'Username / Password incorrect';
               }
             });
-          }), //TODO: Add SIGN IN button routing
+          }),
     );
   }
 

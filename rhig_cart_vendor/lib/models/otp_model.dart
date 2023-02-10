@@ -1,3 +1,5 @@
+import 'package:rhig_cart_vendor/models/dummy_server_model.dart';
+
 import 'input_properties.dart';
 
 class OTP {
@@ -7,8 +9,6 @@ class OTP {
   InputProperties number4 = InputProperties();
   String oTP = '';
 
-  OTP();
-
   String combine() {
     String _oTP = number1.getValue() +
         number2.getValue() +
@@ -17,5 +17,15 @@ class OTP {
     return _oTP;
   }
 
-  Map<String, dynamic> toJson() => {'OTP': oTP};
+  //TODO Replace dummy check with real
+  bool verifyOTP({required String email}) {
+    oTP = combine();
+    if (myServer.checkOTP(email: email, oTP: oTP)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  //Map<String, dynamic> toJson() => {'OTP': oTP};
 }

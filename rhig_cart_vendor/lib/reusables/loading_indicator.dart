@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:rhig_cart_vendor/theme_controller.dart';
 
-// Screen displayed when waiting for theme preferences to load
-Widget loadingScreen() {
+Widget loadingIndicator({String label = ''}) {
   return Scaffold(
     body: Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           SizedBox(
             width: 60,
             height: 60,
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              color: Color(myPrefs.dColourMain1),
+            ),
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 16),
-            child: Text('Loading Preferences...'),
+          Text(
+            label,
+            style: myPrefs.dHeader3Main1Style,
           )
         ],
       ),

@@ -25,7 +25,6 @@ class _TestState extends State<Test> {
               title: const Text('Test Page'),
             ),
             body: buildBottomButton(
-              myPrefs: myPrefs,
               label: 'Testing Target',
               onPressed: () {
                 Navigator.pushReplacementNamed(context, '/welcome',

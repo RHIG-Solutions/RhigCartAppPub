@@ -1,7 +1,7 @@
+import 'package:rhig_cart_vendor/models/dummy_server_model.dart';
 import 'input_properties.dart';
 
 class RecoveryVerification {
-  //TODO Verify data types and correct as needed
   InputProperties email = InputProperties();
   String cell = '';
 
@@ -9,23 +9,19 @@ class RecoveryVerification {
 
   //Checks if the Email address is present and valid, and sets appropriate error message
   bool isValid() {
-    bool isValid = true;
-    if (email.isEmpty()) {
-      isValid = false;
+    //TODO implement server side email verification and replace dummy
+    // Queries server, if email is present, sends cell as response
+    cell = myServer.checkVendorEmail(email: email.getValue());
+    if (cell.isNotEmpty) {
+      return true;
     } else {
-      //TODO implement email verification and replace dummy
-      if (email.getValue() == 'v@lid') {
-        cell = '0123456789';
-      } else {
-        email.error = 'Email address invalid';
-        isValid = false;
-      }
+      email.error = 'Email address invalid';
+      return false;
     }
-    return isValid;
   }
 
-  Map<String, dynamic> toJson() => {'email': email.getValue()};
-
-  RecoveryVerification.fromJson(Map<String, dynamic> json)
-      : cell = json['cell'];
+  // Map<String, dynamic> toJson() => {'email': email.getValue()};
+  //
+  // RecoveryVerification.fromJson(Map<String, dynamic> json)
+  //     : cell = json['cell'];
 }

@@ -21,6 +21,7 @@ class _Recover1State extends State<Recover1> {
 
   @override
   Widget build(BuildContext context) {
+    // Checks if theming settings loaded, and shows appropriate screen
     return ValueListenableBuilder(
       valueListenable: myPrefs.loadNotifier,
       builder: (context, value, _) {
@@ -117,7 +118,6 @@ class _Recover1State extends State<Recover1> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: kMarginMain),
       child: buildBottomButton(
-          myPrefs: myPrefs,
           label: 'CONTINUE',
           onPressed: () {
             setState(() {

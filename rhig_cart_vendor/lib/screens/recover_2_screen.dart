@@ -19,11 +19,14 @@ class Recover2 extends StatefulWidget {
 }
 
 class _Recover2State extends State<Recover2> {
+  // Creates OTP instance for verification
   final OTP _myOTP = OTP();
+  // Error message to display if problem with OTP
   String errorText = '';
 
   @override
   Widget build(BuildContext context) {
+    // Checks if theming settings loaded, and shows appropriate screen
     return ValueListenableBuilder(
       valueListenable: myPrefs.loadNotifier,
       builder: (context, value, _) {
@@ -179,12 +182,10 @@ class _Recover2State extends State<Recover2> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: kMarginMain),
       child: buildBottomButton(
-          myPrefs: myPrefs,
           label: 'CONTINUE',
           onPressed: () {
-            //TODO Implement OTP check and what must be displayed if correct
             setState(() {
-              if (_myOTP.combine() == '1234') {
+              if (_myOTP.verifyOTP(email: widget.myRecovery.email.getValue())) {
                 Navigator.pushNamed(context, '/recover3',
                     arguments: widget.myRecovery);
               } else {

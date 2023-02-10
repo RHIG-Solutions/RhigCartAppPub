@@ -72,6 +72,6 @@ Widget buildTitleWithBackReplacement(BuildContext context,
 Text _buildTitleText(String title) {
   return Text(
     title,
-    style: kHeader2Style,
+    style: kHeader3StyleWhite,
   );
 }

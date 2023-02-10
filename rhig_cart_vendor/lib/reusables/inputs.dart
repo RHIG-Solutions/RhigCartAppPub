@@ -1,3 +1,6 @@
+// PAGE NOTES:
+// - Known flutter issue when assigning values to texteditingcontrollers, field
+// formats are not applied until the user makes a change to the field.
 import 'package:flutter/material.dart';
 import 'package:rhig_cart_vendor/models/edit_vendor_model.dart';
 import 'package:rhig_cart_vendor/theme_controller.dart';
@@ -31,7 +34,7 @@ class InputField extends StatefulWidget {
       this.isPassword = false,
       this.isNumber = false,
       this.isCellNumber = false,
-      this.errorText = '',
+      required this.errorText,
       this.isRequired = true,
       this.hasIcon = false,
       this.icon = Icons.abc})

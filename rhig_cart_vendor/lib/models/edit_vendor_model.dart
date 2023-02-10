@@ -1,3 +1,5 @@
+import 'package:rhig_cart_vendor/models/dummy_server_model.dart';
+
 import 'input_properties.dart';
 import 'edit_password_model.dart';
 import 'edit_address_model.dart';
@@ -7,7 +9,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 class EditVendor {
-  //TODO Verify data types and correct as needed
+  final Vendor _myVendor = Vendor();
   InputProperties firstName = InputProperties();
   InputProperties lastName = InputProperties();
   InputProperties cell = InputProperties();
@@ -73,16 +75,22 @@ class EditVendor {
         base64.encode(imagebytes); //Return the image as base64 String
   }
 
-  Vendor assignValues() {
-    Vendor myVendor = Vendor();
-    myVendor.firstName = firstName.getValue();
-    myVendor.lastName = lastName.getValue();
-    myVendor.cell = cell.getValue();
-    myVendor.email = email.getValue();
-    myVendor.address = address.assignValues();
-    myVendor.password = password.getValue();
-    myVendor.newsletter = newsletter;
-    myVendor.profileImage = profileImage;
-    return myVendor;
+  // Assigns the values assigned during editing to the basic vendor model and
+  // returns that
+  assignValues() {
+    _myVendor.firstName = firstName.getValue();
+    _myVendor.lastName = lastName.getValue();
+    _myVendor.cell = cell.getValue().replaceAll(' ', '');
+    _myVendor.email = email.getValue();
+    _myVendor.address = address.assignValues();
+    _myVendor.password = password.getValue();
+    _myVendor.newsletter = newsletter;
+    _myVendor.profileImage = profileImage;
+  }
+
+  // Creates new vendor on server
+  addVendorToServer() {
+    assignValues();
+    myServer.addVendor(newVendor: _myVendor);
   }
 }

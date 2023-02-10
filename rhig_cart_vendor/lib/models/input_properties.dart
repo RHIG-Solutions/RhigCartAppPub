@@ -20,4 +20,13 @@ class InputProperties {
   String getValue() {
     return controller.text;
   }
+
+  setValue({required String value}) {
+    controller.value = TextEditingValue(
+      text: value,
+      selection: TextSelection.fromPosition(
+        TextPosition(offset: value.length),
+      ),
+    );
+  }
 }

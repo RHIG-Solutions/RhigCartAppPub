@@ -147,7 +147,6 @@ class _SignUp2State extends State<SignUp2> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: kMarginMain),
       child: buildBottomButton(
-          myPrefs: myPrefs,
           label: 'CONTINUE',
           onPressed: () {
             setState(() {
