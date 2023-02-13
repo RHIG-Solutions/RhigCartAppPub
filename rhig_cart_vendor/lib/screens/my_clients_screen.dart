@@ -3,15 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:rhig_cart_vendor/constants.dart';
 import 'package:rhig_cart_vendor/models/basic_client_list_model.dart';
-import 'package:rhig_cart_vendor/models/edit_client_model.dart';
 import 'package:rhig_cart_vendor/reusables/buttons.dart';
-import 'package:rhig_cart_vendor/theme_controller.dart';
+import 'package:rhig_cart_vendor/theme_controller_model.dart';
 import 'package:rhig_cart_vendor/screens/loading_screen.dart';
 import 'package:rhig_cart_vendor/reusables/loading_indicator.dart';
+import 'package:rhig_cart_vendor/models/session_variables.dart';
 
 class MyClients extends StatefulWidget {
-  final String loggedInUser;
-  const MyClients(this.loggedInUser, {Key? key}) : super(key: key);
+  const MyClients({Key? key}) : super(key: key);
 
   @override
   State<MyClients> createState() => _MyClientsState();
@@ -25,7 +24,7 @@ class _MyClientsState extends State<MyClients> {
 
   @override
   Widget build(BuildContext context) {
-    myClients.loadClientList(loggedInUser: widget.loggedInUser);
+    myClients.loadClientList(loggedInUser: mySession.getUser());
     return ValueListenableBuilder(
       valueListenable: myPrefs.loadNotifier,
       builder: (context, value, _) {
@@ -54,8 +53,7 @@ class _MyClientsState extends State<MyClients> {
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_sharp),
         onPressed: () {
-          Navigator.pushReplacementNamed(context, '/dashboard',
-              arguments: widget.loggedInUser);
+          Navigator.pushReplacementNamed(context, '/dashboard');
         },
       ),
       title: const Center(
@@ -121,12 +119,8 @@ class _MyClientsState extends State<MyClients> {
           child: buildBottomButton(
               label: '+ NEW CLIENT',
               onPressed: () {
-                EditClientArguments clientToEdit = EditClientArguments(
-                  loggedInUser: widget.loggedInUser,
-                  clientToEdit: '',
-                );
                 Navigator.pushReplacementNamed(context, '/editclient',
-                    arguments: clientToEdit);
+                    arguments: '');
               }),
         ),
       ],
@@ -197,11 +191,8 @@ class _MyClientsState extends State<MyClients> {
             // account number as arguments
             GestureDetector(
               onTap: () {
-                EditClientArguments clientToEdit = EditClientArguments(
-                    loggedInUser: widget.loggedInUser,
-                    clientToEdit: myClientList[index].accountNumber);
                 Navigator.pushReplacementNamed(context, '/editclient',
-                    arguments: clientToEdit);
+                    arguments: myClientList[index].accountNumber);
               },
               child: Padding(
                 padding: EdgeInsets.only(

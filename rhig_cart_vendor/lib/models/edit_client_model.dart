@@ -127,14 +127,6 @@ class EditClient {
   }
 }
 
-// Set of arguments to pass to client editing screen
-class EditClientArguments {
-  late String loggedInUser;
-  late String clientToEdit;
-
-  EditClientArguments({required this.loggedInUser, required this.clientToEdit});
-}
-
 // Set of data to pass to editing screen to check if client exists
 class ExistingClientSpecifics {
   int index = -1;

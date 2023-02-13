@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rhig_cart_vendor/theme_controller.dart';
+import 'package:rhig_cart_vendor/theme_controller_model.dart';
 import '../constants.dart';
 
 //Set of constants specific to the screen art

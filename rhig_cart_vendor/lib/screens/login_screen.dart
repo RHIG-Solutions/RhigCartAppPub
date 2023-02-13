@@ -6,8 +6,9 @@ import 'package:rhig_cart_vendor/reusables/inputs.dart';
 import 'package:rhig_cart_vendor/reusables/buttons.dart';
 import 'package:rhig_cart_vendor/models/edit_vendor_model.dart';
 import 'package:rhig_cart_vendor/models/login_model.dart';
-import 'package:rhig_cart_vendor/theme_controller.dart';
+import 'package:rhig_cart_vendor/theme_controller_model.dart';
 import 'package:rhig_cart_vendor/screens/loading_screen.dart';
+import 'package:rhig_cart_vendor/models/session_variables.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -150,6 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
           onPressed: () {
             setState(() {
               if (_myLogin.successful()) {
+                mySession.setUser(loggedInUser: _myLogin.loggedInAccount);
                 _myLogin.password.error = '';
                 Navigator.pushReplacementNamed(context, '/dashboard',
                     arguments: _myLogin.loggedInAccount);

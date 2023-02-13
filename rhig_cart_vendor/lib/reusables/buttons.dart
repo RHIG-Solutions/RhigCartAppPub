@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants.dart';
-import 'package:rhig_cart_vendor/theme_controller.dart';
+import 'package:rhig_cart_vendor/theme_controller_model.dart';
 
 // Builds standard  button at bottom of screen
 SizedBox buildBottomButton(

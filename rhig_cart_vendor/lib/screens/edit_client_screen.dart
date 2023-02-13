@@ -4,23 +4,26 @@
 
 import 'package:flutter/material.dart';
 import 'package:rhig_cart_vendor/constants.dart';
-import 'package:rhig_cart_vendor/theme_controller.dart';
+import 'package:rhig_cart_vendor/theme_controller_model.dart';
 import 'package:rhig_cart_vendor/screens/loading_screen.dart';
 import 'package:rhig_cart_vendor/models/edit_client_model.dart';
+import 'package:rhig_cart_vendor/models/session_variables.dart';
 import 'package:rhig_cart_vendor/reusables/loading_indicator.dart';
 import 'package:rhig_cart_vendor/reusables/buttons.dart';
 import 'package:rhig_cart_vendor/reusables/inputs.dart';
 import 'package:rhig_cart_vendor/reusables/alerts.dart';
 
 class EditClientScreen extends StatefulWidget {
-  final EditClientArguments editArguments;
-  const EditClientScreen(this.editArguments, {Key? key}) : super(key: key);
+  final String accountToEdit;
+  const EditClientScreen(this.accountToEdit, {Key? key}) : super(key: key);
 
   @override
   State<EditClientScreen> createState() => _EditClientScreenState();
 }
 
 class _EditClientScreenState extends State<EditClientScreen> {
+  // Local version of accountToEdit
+  String accountToEdit = '';
   // Creates object used for editing/creating a client
   EditClient myClient = EditClient();
   // Margins and spacing between editing input fields
@@ -35,11 +38,13 @@ class _EditClientScreenState extends State<EditClientScreen> {
   // Loads client data at page creation if it is an edit and not a new client
   void initState() {
     super.initState();
-    if (widget.editArguments.clientToEdit != '') {
+    // Sets account to edit as per arguments passed to page
+    accountToEdit = widget.accountToEdit;
+    if (accountToEdit != '') {
       newClient = false;
       myClient.loadClient(
-          loggedInUser: widget.editArguments.clientToEdit,
-          accountNumber: widget.editArguments.clientToEdit);
+          loggedInUser: SessionVariables().getUser(),
+          accountNumber: accountToEdit);
       title =
           '${myClient.firstName.getValue()} ${myClient.lastName.getValue()}';
     } else {
@@ -86,8 +91,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_sharp),
         onPressed: () {
-          Navigator.pushReplacementNamed(context, '/clients',
-              arguments: widget.editArguments.loggedInUser);
+          Navigator.pushReplacementNamed(context, '/clients');
         },
       ),
       // Displays title with client name or "New Client", depending...
@@ -343,14 +347,11 @@ class _EditClientScreenState extends State<EditClientScreen> {
                           newClient
                               ? myClient.clearInputs()
                               : myClient.deleteClient(
-                                  loggedInUser:
-                                      widget.editArguments.loggedInUser,
-                                  accountNumber:
-                                      widget.editArguments.clientToEdit);
+                                  loggedInUser: mySession.getUser(),
+                                  accountNumber: accountToEdit);
                           Navigator.of(context, rootNavigator: true).pop();
                           if (newClient == false) {
-                            Navigator.pushReplacementNamed(context, '/clients',
-                                arguments: widget.editArguments.loggedInUser);
+                            Navigator.pushReplacementNamed(context, '/clients');
                           }
                         },
                         colour: Colors.red,
@@ -375,7 +376,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
                             ExistingClientSpecifics();
                         if (newClient) {
                           existingClientSpecifics = myClient.alreadyExists(
-                              loggedInUser: widget.editArguments.loggedInUser);
+                              loggedInUser: mySession.getUser());
                         }
                         if (existingClientSpecifics.index != -1 &&
                             newClient == true) {
@@ -404,19 +405,17 @@ class _EditClientScreenState extends State<EditClientScreen> {
                                 onPressed: () {
                                   setState(() {
                                     newClient = false;
-                                    widget.editArguments.clientToEdit =
+                                    accountToEdit =
                                         existingClientSpecifics.accountNumber;
                                     existingClientSpecifics.isActive
                                         ? null
                                         : myClient.reactivateClient(
-                                            loggedInUser: widget
-                                                .editArguments.loggedInUser,
+                                            loggedInUser: mySession.getUser(),
                                             accountNumber:
                                                 existingClientSpecifics
                                                     .accountNumber);
                                     myClient.loadClient(
-                                        loggedInUser:
-                                            widget.editArguments.loggedInUser,
+                                        loggedInUser: mySession.getUser(),
                                         accountNumber: existingClientSpecifics
                                             .accountNumber);
                                     Navigator.of(context, rootNavigator: true)
@@ -428,9 +427,9 @@ class _EditClientScreenState extends State<EditClientScreen> {
                           ]);
                         } else {
                           myClient.saveClient(
-                              loggedInUser: widget.editArguments.loggedInUser,
+                              loggedInUser: mySession.getUser(),
                               isNew: newClient,
-                              accountNumber: widget.editArguments.clientToEdit);
+                              accountNumber: accountToEdit);
                           showConfirmDialog(
                             context,
                             messages: [
@@ -448,9 +447,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
                                     Navigator.of(context, rootNavigator: true)
                                         .pop();
                                     Navigator.pushReplacementNamed(
-                                        context, '/clients',
-                                        arguments:
-                                            widget.editArguments.loggedInUser);
+                                        context, '/clients');
                                   },
                                   colour: kColourRHIGGrey,
                                   context: context),

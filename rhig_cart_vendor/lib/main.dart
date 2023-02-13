@@ -1,5 +1,9 @@
+// Imports
+// Misc
 import 'package:flutter/material.dart';
-import 'package:rhig_cart_vendor/models/recovery_model.dart';
+import 'package:rhig_cart_vendor/theme_controller_model.dart';
+
+// Screens
 import 'package:rhig_cart_vendor/screens/dashboard_screen.dart';
 import 'package:rhig_cart_vendor/screens/login_screen.dart';
 import 'package:rhig_cart_vendor/screens/password_reset_success_screen.dart';
@@ -12,13 +16,14 @@ import 'package:rhig_cart_vendor/screens/signup_2_screen.dart';
 import 'package:rhig_cart_vendor/screens/signup_3_screen.dart';
 import 'package:rhig_cart_vendor/screens/signup_4_screen.dart';
 import 'package:rhig_cart_vendor/screens/welcome_screen.dart';
-import 'package:rhig_cart_vendor/models/edit_vendor_model.dart';
 import 'package:rhig_cart_vendor/screens/theme_selector_screen.dart';
 import 'package:rhig_cart_vendor/screens/my_clients_screen.dart';
-import 'package:rhig_cart_vendor/theme_controller.dart';
 import 'package:rhig_cart_vendor/screens/loading_screen.dart';
 import 'package:rhig_cart_vendor/screens/edit_client_screen.dart';
-import 'package:rhig_cart_vendor/models/edit_client_model.dart';
+
+// Models
+import 'package:rhig_cart_vendor/models/recovery_model.dart';
+import 'package:rhig_cart_vendor/models/edit_vendor_model.dart';
 import 'package:rhig_cart_vendor/models/dummy_server_model.dart';
 
 void main() => runApp(const RhigCartVendor());
@@ -56,6 +61,8 @@ class _RhigCartVendorState extends State<RhigCartVendor> {
                 '/passwordresetsuccess': (context) =>
                     const PasswordResetSuccess(),
                 '/themeselector': (context) => const ThemeSelector(),
+                '/dashboard': (context) => const Dashboard(),
+                '/clients': (context) => const MyClients(),
                 '/test': (context) =>
                     const Test(), //TODO: Remove test route when done
               },
@@ -95,19 +102,9 @@ class _RhigCartVendorState extends State<RhigCartVendor> {
                       as RecoveryVerification; // Retrieve the value.
                   return MaterialPageRoute(builder: (_) => Recover3(value));
                 }
-                if (settings.name == '/dashboard') {
-                  final value =
-                      settings.arguments as String; // Retrieve the value.
-                  return MaterialPageRoute(builder: (_) => Dashboard(value));
-                }
-                if (settings.name == '/clients') {
-                  final value =
-                      settings.arguments as String; // Retrieve the value.
-                  return MaterialPageRoute(builder: (_) => MyClients(value));
-                }
                 if (settings.name == '/editclient') {
-                  final value = settings.arguments
-                      as EditClientArguments; // Retrieve the value.
+                  final value =
+                      settings.arguments as String; // Retrieve the value.
                   return MaterialPageRoute(
                       builder: (_) => EditClientScreen(value));
                 }

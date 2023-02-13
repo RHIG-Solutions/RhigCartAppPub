@@ -16,10 +16,6 @@ class BasicClientList {
   // Switch to signify if client list has been populated
   bool clientListPopulated = false;
 
-  // BasicClientList() {
-  //   loadClientList();
-  // }
-
   // Retrieves client data from the server, checking active status
   loadClientList({required String loggedInUser}) {
     //TODO Replace dummy server calls with real thing

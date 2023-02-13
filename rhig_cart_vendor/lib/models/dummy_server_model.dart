@@ -115,6 +115,15 @@ class DummyServer {
     return _myClients.length;
   }
 
+  // Returns number of active clients in database
+  int getNumberOfActiveClients({required String loggedInUser}) {
+    int numberOfActiveClients = 0;
+    for (int index = 0; index < _myClients.length; index++) {
+      _myClients[index].isActive ? numberOfActiveClients++ : null;
+    }
+    return numberOfActiveClients;
+  }
+
   // Returns a client object as per account number
   Client loadClient({required accountNumber}) {
     final int index = _myClients

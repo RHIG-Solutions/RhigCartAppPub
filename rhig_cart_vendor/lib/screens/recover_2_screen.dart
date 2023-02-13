@@ -3,7 +3,7 @@ import 'package:rhig_cart_vendor/models/recovery_model.dart';
 import 'package:rhig_cart_vendor/constants.dart';
 import 'package:rhig_cart_vendor/reusables/screenart.dart';
 import 'package:rhig_cart_vendor/reusables/title_block.dart';
-import 'package:rhig_cart_vendor/theme_controller.dart';
+import 'package:rhig_cart_vendor/theme_controller_model.dart';
 import 'package:rhig_cart_vendor/reusables/inputs.dart';
 import 'package:rhig_cart_vendor/reusables/buttons.dart';
 import 'package:rhig_cart_vendor/models/otp_model.dart';

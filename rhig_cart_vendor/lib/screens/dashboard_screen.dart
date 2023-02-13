@@ -3,12 +3,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:rhig_cart_vendor/constants.dart';
-import 'package:rhig_cart_vendor/theme_controller.dart';
+import 'package:rhig_cart_vendor/models/dashboard_info_model.dart';
+import 'package:rhig_cart_vendor/models/session_variables.dart';
+import 'package:rhig_cart_vendor/theme_controller_model.dart';
 import 'package:rhig_cart_vendor/screens/loading_screen.dart';
 
 class Dashboard extends StatefulWidget {
-  final String loggedInUser;
-  const Dashboard(this.loggedInUser, {Key? key}) : super(key: key);
+  const Dashboard({Key? key}) : super(key: key);
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -23,155 +24,15 @@ class _DashboardState extends State<Dashboard> {
   int itemsPerRow = 0;
   // Variable used to help in determining button height
   double heightRatio = 1;
-
-  // List of store buttons. Add or remove needed buttons here
-
-  // My Clients button
-  List<StoreButton> storeButtons = [
-    StoreButton(
-      icon: const Icon(
-        Icons.group,
-        color: Colors.white,
-      ),
-      descriptions: [
-        const Text(
-          'MY CLIENTS',
-          style: TextStyle(color: Colors.white),
-        ),
-      ],
-      displayCounter: true,
-      target: '/clients',
-    ),
-    // My Suppliers button
-    StoreButton(
-      icon: const Icon(
-        Icons.group,
-        color: Colors.white,
-      ),
-      descriptions: [
-        const Text(
-          'MY SUPPLIERS',
-          style: TextStyle(color: Colors.white),
-        ),
-        const Text(
-          '(Coming Soon)',
-          style: TextStyle(
-            color: Colors.yellow,
-            fontSize: 10,
-          ),
-        ),
-      ],
-      displayCounter: true,
-      target: '/',
-    ),
-    //TODO Remove dummy buttons when testing is complete
-    StoreButton(
-      icon: const Icon(
-        Icons.group,
-        color: Colors.white,
-      ),
-      descriptions: [
-        const Text(
-          'Dummy 1',
-          style: TextStyle(color: Colors.white),
-        ),
-        const Text(
-          '(Ignore me)',
-          style: TextStyle(
-            color: Colors.yellow,
-            fontSize: 10,
-          ),
-        ),
-      ],
-      target: '/',
-    ),
-    StoreButton(
-      icon: const Icon(
-        Icons.group,
-        color: Colors.white,
-      ),
-      descriptions: [
-        const Text(
-          'Dummy 2',
-          style: TextStyle(color: Colors.white),
-        ),
-        const Text(
-          '(Ignore me)',
-          style: TextStyle(
-            color: Colors.yellow,
-            fontSize: 10,
-          ),
-        ),
-      ],
-      target: '/',
-    ),
-    StoreButton(
-      icon: const Icon(
-        Icons.group,
-        color: Colors.white,
-      ),
-      descriptions: [
-        const Text(
-          'Dummy 3',
-          style: TextStyle(color: Colors.white),
-        ),
-        const Text(
-          '(Ignore me)',
-          style: TextStyle(
-            color: Colors.yellow,
-            fontSize: 10,
-          ),
-        ),
-      ],
-      displayCounter: true,
-      target: '/',
-    ),
-    StoreButton(
-      icon: const Icon(
-        Icons.group,
-        color: Colors.white,
-      ),
-      descriptions: [
-        const Text(
-          'Dummy 4',
-          style: TextStyle(color: Colors.white),
-        ),
-        const Text(
-          '(Ignore me)',
-          style: TextStyle(
-            color: Colors.yellow,
-            fontSize: 10,
-          ),
-        ),
-      ],
-      displayCounter: false,
-      target: '/',
-    ),
-    StoreButton(
-      icon: const Icon(
-        Icons.group,
-        color: Colors.white,
-      ),
-      descriptions: [
-        const Text(
-          'Dummy 5',
-          style: TextStyle(color: Colors.white),
-        ),
-        const Text(
-          '(Ignore me)',
-          style: TextStyle(
-            color: Colors.yellow,
-            fontSize: 10,
-          ),
-        ),
-      ],
-      displayCounter: true,
-      target: '/',
-    ),
-  ];
+  // Dataset for dashboard variables
+  DashboardInfo myDashboardInfo = DashboardInfo();
+  // List for dashboard buttons
+  List<DashboardButton> dashboardButtons = [];
 
   @override
   Widget build(BuildContext context) {
+    // Add dashboard buttons to the list in the below method
+    createButtonList();
     // Determines screen width
     final double screenWidth = MediaQuery.of(context).size.width;
     // Determines maximum number of items that can be displayed per row
@@ -180,8 +41,8 @@ class _DashboardState extends State<Dashboard> {
         .floor();
     // Sets actual number of items per row depending on available space and
     // items
-    if (maxItemsPerRow > storeButtons.length) {
-      itemsPerRow = storeButtons.length;
+    if (maxItemsPerRow > dashboardButtons.length) {
+      itemsPerRow = dashboardButtons.length;
     } else {
       itemsPerRow = maxItemsPerRow;
     }
@@ -224,6 +85,7 @@ class _DashboardState extends State<Dashboard> {
         IconButton(
           icon: const Icon(Icons.exit_to_app_rounded),
           onPressed: () {
+            mySession.logOutUser();
             Navigator.pushReplacementNamed(context, '/');
           },
         ),
@@ -271,8 +133,7 @@ class _DashboardState extends State<Dashboard> {
                       onTap: () {
                         // Goes to storeButton target page
                         Navigator.pushReplacementNamed(
-                            context, storeButtons[index].target,
-                            arguments: widget.loggedInUser);
+                            context, dashboardButtons[index].target);
                       },
                       // Creates the store buttons
                       child: Container(
@@ -281,20 +142,20 @@ class _DashboardState extends State<Dashboard> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            storeButtons[index].icon,
+                            dashboardButtons[index].icon,
                             for (int textCounter = 0;
                                 textCounter <
-                                    storeButtons[index].descriptions.length;
+                                    dashboardButtons[index].descriptions.length;
                                 textCounter++)
-                              storeButtons[index].descriptions[textCounter],
+                              dashboardButtons[index].descriptions[textCounter],
                             Expanded(
                               child: Container(),
                             ),
-                            if (storeButtons[index].displayCounter)
+                            if (dashboardButtons[index].counter >= 0)
                               Align(
                                 alignment: Alignment.bottomCenter,
                                 child: Text(
-                                  storeButtons[index].counter.toString(),
+                                  dashboardButtons[index].counter.toString(),
                                   style: const TextStyle(
                                       fontSize: 30.0, color: Colors.white),
                                 ),
@@ -304,7 +165,7 @@ class _DashboardState extends State<Dashboard> {
                       ),
                     );
                   },
-                  childCount: storeButtons.length,
+                  childCount: dashboardButtons.length,
                 ),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: itemsPerRow,
@@ -317,24 +178,163 @@ class _DashboardState extends State<Dashboard> {
       ),
     );
   }
-}
 
-// Class to define store button properties
-class StoreButton {
-  // Which icon to display (not required, default value is menu icon)
-  Icon icon;
-  // List of Text widgets to display (required value)
-  List<Text> descriptions;
-  // Counter value for button
-  int counter = 0;
-  // Switch to determine if the above counter is to be displayed (default = false)
-  bool displayCounter;
-  // Target that the button is pointed at (required value)
-  String target;
-
-  StoreButton(
-      {this.icon = const Icon(Icons.menu),
-      required this.descriptions,
-      this.displayCounter = false,
-      required this.target});
+  // Add/Rearrange buttons for dashboard in this method
+  createButtonList() {
+    if (dashboardButtons.isEmpty) {
+      dashboardButtons.add(
+        //My Clients button
+        DashboardButton(
+          icon: const Icon(
+            Icons.group,
+            color: Colors.white,
+          ),
+          descriptions: [
+            const Text(
+              'MY CLIENTS',
+              style: TextStyle(color: Colors.white),
+            ),
+          ],
+          counter: myDashboardInfo.getNumberOfActiveClients(),
+          target: '/clients',
+        ),
+      );
+      dashboardButtons.add(
+        // My Suppliers button
+        //TODO Implement Suppliers button functionality and counter
+        DashboardButton(
+          icon: const Icon(
+            Icons.group,
+            color: Colors.white,
+          ),
+          descriptions: [
+            const Text(
+              'MY SUPPLIERS',
+              style: TextStyle(color: Colors.white),
+            ),
+            const Text(
+              '(Coming Soon)',
+              style: TextStyle(
+                color: Colors.yellow,
+                fontSize: 10,
+              ),
+            ),
+          ],
+          counter: 0,
+          target: '/',
+        ),
+      );
+      //TODO Remove dummy buttons when testing is complete
+      dashboardButtons.add(
+        DashboardButton(
+          icon: const Icon(
+            Icons.group,
+            color: Colors.white,
+          ),
+          descriptions: [
+            const Text(
+              'Dummy 1',
+              style: TextStyle(color: Colors.white),
+            ),
+            const Text(
+              '(Ignore me)',
+              style: TextStyle(
+                color: Colors.yellow,
+                fontSize: 10,
+              ),
+            ),
+          ],
+          target: '/',
+        ),
+      );
+      dashboardButtons.add(
+        DashboardButton(
+          icon: const Icon(
+            Icons.group,
+            color: Colors.white,
+          ),
+          descriptions: [
+            const Text(
+              'Dummy 2',
+              style: TextStyle(color: Colors.white),
+            ),
+            const Text(
+              '(Ignore me)',
+              style: TextStyle(
+                color: Colors.yellow,
+                fontSize: 10,
+              ),
+            ),
+          ],
+          target: '/',
+        ),
+      );
+      dashboardButtons.add(
+        DashboardButton(
+          icon: const Icon(
+            Icons.group,
+            color: Colors.white,
+          ),
+          descriptions: [
+            const Text(
+              'Dummy 3',
+              style: TextStyle(color: Colors.white),
+            ),
+            const Text(
+              '(Ignore me)',
+              style: TextStyle(
+                color: Colors.yellow,
+                fontSize: 10,
+              ),
+            ),
+          ],
+          target: '/',
+        ),
+      );
+      dashboardButtons.add(
+        DashboardButton(
+          icon: const Icon(
+            Icons.group,
+            color: Colors.white,
+          ),
+          descriptions: [
+            const Text(
+              'Dummy 4',
+              style: TextStyle(color: Colors.white),
+            ),
+            const Text(
+              '(Ignore me)',
+              style: TextStyle(
+                color: Colors.yellow,
+                fontSize: 10,
+              ),
+            ),
+          ],
+          target: '/',
+        ),
+      );
+      dashboardButtons.add(
+        DashboardButton(
+          icon: const Icon(
+            Icons.group,
+            color: Colors.white,
+          ),
+          descriptions: [
+            const Text(
+              'Dummy 5',
+              style: TextStyle(color: Colors.white),
+            ),
+            const Text(
+              '(Ignore me)',
+              style: TextStyle(
+                color: Colors.yellow,
+                fontSize: 10,
+              ),
+            ),
+          ],
+          target: '/',
+        ),
+      );
+    }
+  }
 }
