@@ -53,7 +53,7 @@ class _MyClientsState extends State<MyClients> {
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_sharp),
         onPressed: () {
-          Navigator.pushReplacementNamed(context, '/dashboard');
+          Navigator.pop(context);
         },
       ),
       title: const Center(
@@ -119,8 +119,11 @@ class _MyClientsState extends State<MyClients> {
           child: buildBottomButton(
               label: '+ NEW CLIENT',
               onPressed: () {
-                Navigator.pushReplacementNamed(context, '/editclient',
-                    arguments: '');
+                Navigator.of(context)
+                    .pushNamed("/editclient", arguments: '')
+                    .then((value) => setState(() {
+                          myClients.loadNotifier.value = false;
+                        }));
               }),
         ),
       ],
@@ -191,8 +194,12 @@ class _MyClientsState extends State<MyClients> {
             // account number as arguments
             GestureDetector(
               onTap: () {
-                Navigator.pushReplacementNamed(context, '/editclient',
-                    arguments: myClientList[index].accountNumber);
+                Navigator.of(context)
+                    .pushNamed("/editclient",
+                        arguments: myClientList[index].accountNumber)
+                    .then((value) => setState(() {
+                          myClients.loadNotifier.value = false;
+                        }));
               },
               child: Padding(
                 padding: EdgeInsets.only(

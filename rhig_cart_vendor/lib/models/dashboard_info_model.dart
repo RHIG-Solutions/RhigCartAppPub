@@ -4,6 +4,7 @@ import 'package:rhig_cart_vendor/models/dummy_server_model.dart';
 
 class DashboardInfo {
   late int _numberOfActiveClients;
+  bool needsReload = false;
 
   DashboardInfo() {
     // Gets needed information from server
@@ -13,7 +14,13 @@ class DashboardInfo {
 
   // returns number of clients
   int getNumberOfActiveClients() {
+    needsReload = false;
     return _numberOfActiveClients;
+  }
+
+  refreshDataFromServer() {
+    _numberOfActiveClients =
+        myServer.getNumberOfActiveClients(loggedInUser: mySession.getUser());
   }
 }
 

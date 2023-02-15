@@ -153,8 +153,14 @@ class _LoginScreenState extends State<LoginScreen> {
               if (_myLogin.successful()) {
                 mySession.setUser(loggedInUser: _myLogin.loggedInAccount);
                 _myLogin.password.error = '';
-                Navigator.pushReplacementNamed(context, '/dashboard',
-                    arguments: _myLogin.loggedInAccount);
+                Navigator.pushNamed(context, '/dashboard',
+                        arguments: _myLogin.loggedInAccount)
+                    .then((value) => setState(() {
+                          mySession.logOutUser();
+                          _myLogin.loggedInAccount = '';
+                          _myLogin.email.setValue(value: '');
+                          _myLogin.password.setValue(value: '');
+                        }));
               } else {
                 _myLogin.password.error = 'Username / Password incorrect';
               }

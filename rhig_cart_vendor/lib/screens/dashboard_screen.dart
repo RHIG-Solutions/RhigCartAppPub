@@ -96,8 +96,7 @@ class _DashboardState extends State<Dashboard> {
   RefreshIndicator buildBody() {
     return RefreshIndicator(
       onRefresh: () async {
-        //TODO Implement actions of refresh on scroll down, removing artificial testing delay.
-        return Future<void>.delayed(const Duration(seconds: 2));
+        return refreshData();
       },
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: kSpacerStore),
@@ -107,6 +106,7 @@ class _DashboardState extends State<Dashboard> {
             slivers: <Widget>[
               // Displays "Pull down to refresh" on top
               SliverAppBar(
+                automaticallyImplyLeading: false,
                 backgroundColor: Colors.white,
                 centerTitle: true,
                 pinned: true,
@@ -132,8 +132,11 @@ class _DashboardState extends State<Dashboard> {
                     return GestureDetector(
                       onTap: () {
                         // Goes to storeButton target page
-                        Navigator.pushReplacementNamed(
-                            context, dashboardButtons[index].target);
+                        Navigator.pushNamed(
+                                context, dashboardButtons[index].target)
+                            .then((value) => setState(() {
+                                  myDashboardInfo.needsReload = true;
+                                }));
                       },
                       // Creates the store buttons
                       child: Container(
@@ -181,6 +184,8 @@ class _DashboardState extends State<Dashboard> {
 
   // Add/Rearrange buttons for dashboard in this method
   createButtonList() {
+    myDashboardInfo.refreshDataFromServer();
+    dashboardButtons.clear();
     if (dashboardButtons.isEmpty) {
       dashboardButtons.add(
         //My Clients button
@@ -336,5 +341,15 @@ class _DashboardState extends State<Dashboard> {
         ),
       );
     }
+  }
+
+  // Refreshes the Dashboard page
+  Future refreshData() async {
+    //TODO Remove refresh delay when testing complete
+    setState(() {
+      // Recreates the button list, getting fresh data from the server
+      createButtonList();
+    });
+    await Future.delayed(Duration(seconds: 3));
   }
 }

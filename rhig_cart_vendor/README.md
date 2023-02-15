@@ -5,3 +5,5 @@ Notes: (26 Aug 2022)
 - Remove Dummy server when server communication gets implemented
 - Dummy server has two lists, one for vendors, one for clients. Client list is shared between
   vendors as it is purely for testing purposes.
+- Issues with profile picture encoding still WIP.
+- More comprehensive notes and descriptions will be added when screen layouts and basic functionality is approved.

@@ -91,7 +91,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_sharp),
         onPressed: () {
-          Navigator.pushReplacementNamed(context, '/clients');
+          Navigator.pop(context);
         },
       ),
       // Displays title with client name or "New Client", depending...
@@ -351,7 +351,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
                                   accountNumber: accountToEdit);
                           Navigator.of(context, rootNavigator: true).pop();
                           if (newClient == false) {
-                            Navigator.pushReplacementNamed(context, '/clients');
+                            Navigator.pop(context);
                           }
                         },
                         colour: Colors.red,
@@ -446,8 +446,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
                                   onPressed: () {
                                     Navigator.of(context, rootNavigator: true)
                                         .pop();
-                                    Navigator.pushReplacementNamed(
-                                        context, '/clients');
+                                    Navigator.pop(context);
                                   },
                                   colour: kColourRHIGGrey,
                                   context: context),
